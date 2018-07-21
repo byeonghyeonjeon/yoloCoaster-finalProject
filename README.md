@@ -14,14 +14,14 @@
 - js-cookie를 이용한 최근 본 여행지 저장 기능 제공
 
 ### 참여자
-이름|역할
----|---
-김상준  |  PL
-김규영  |  TA
-김영릭  |  DA
-전병현  |  UA
-백선경  |  AA
-고지희  |  AA
+이름|역할|github
+---|---|---
+김상준  |  PL  | [sangjunkimDev](https://github.com/sangjunkimDev)
+김규영  |  TA  | [gyoung0210](https://github.com/gyoung0210)
+김영림  |  DA  | [oso7coda](https://github.com/oso7coda)
+전병현  |  UA  | [byeonghyeonjeon](https://github.com/byeonghyeonjeon)
+백선경  |  AA  | [dmsgktnekfl](https://github.com/dmsgktnekfl)
+고지희  |  AA  | [수정필요](https://www.google.com)
 
 ### 사용 언어
 이름 | 버전
