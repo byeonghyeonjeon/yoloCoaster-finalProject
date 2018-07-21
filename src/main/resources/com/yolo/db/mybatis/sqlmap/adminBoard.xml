@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adminBoard">
+
+	<select id="adminBoardStCnt" parameterType="java.util.Map" resultType="int">
+	SELECT count(*)
+		FROM
+	    board
+	    WHERE pboard_seq =#{pboard_seq}
+	    and board_st = #{condition}
+	</select>
+
+	<update id="boardStReset" parameterType="java.util.Map">
+		UPDATE board
+		    SET
+		        board_st = #{board_st}
+		WHERE
+		     board_seq =#{link}
+	</update>
+
+	<delete id="deleteBoardData" parameterType="int">
+		DELETE FROM board
+		WHERE
+	    board_seq =#{board_seq}
+	</delete>
+
+	<select id="adminBoardPageCnt" parameterType="java.util.Map" resultType="int">
+		SELECT count(*)
+		FROM
+	    board
+	    WHERE pboard_seq =#{pboard_seq}
+	    and board_title like #{keyword}
+	</select>
+
+	<!-- 관리자 QNA 검색 -->
+	<select id="adminSelectListboard" parameterType="java.util.Map" resultType="BoardVO">
+	<![CDATA[
+		SELECT X.*
+		FROM 
+			   (SELECT ROWNUM rnum, A.* FROM 
+				(SELECT * FROM board
+      		where pboard_seq = #{pboard_seq}
+      			and board_title like #{keyword}
+				ORDER BY board_seq DESC) A
+			   	WHERE ROWNUM <= #{pageNo}*10) X
+	 	WHERE 
+	 		X.rnum >= (#{pageNo}-1)*10 + 1
+	]]>
+	</select>
+		
+</mapper>

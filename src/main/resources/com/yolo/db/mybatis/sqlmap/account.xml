@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="account">
+
+	<!-- accountVO insert -->
+	<insert id="accountInsert" parameterType="AccountVO">
+		<selectKey order="BEFORE" keyProperty="account_seq" resultType="int" >
+		 			SELECT account_seq.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO
+		ACCOUNT(
+				 account_seq,
+				 chat_seq,
+		         account_total,
+		         account_dt,
+		         account_cnt,
+		         account_num,
+		         account_info,
+		         account_memo,
+		         account_detail,
+		         mem_id)                    
+		VALUES(
+				#{account_seq},
+				#{chat_seq},
+				#{account_total},
+			    #{account_dt},
+			    #{account_cnt},
+			    #{account_num},
+			    #{account_info},
+			    #{account_memo},
+			    #{account_detail},
+			    #{mem_id}			
+		)	
+	</insert>
+	
+	<!-- dutchVO insert -->
+	<insert id="dutchInsert" parameterType="java.util.List">
+			INSERT INTO DUTCH(dutch_seq, account_seq, dutch_mem_id, dutch_money)
+			SELECT dutch_seq.NEXTVAL, INNER_VIEW.*
+			FROM (
+				<foreach collection="list" item="map" index ="index" separator=" UNION ALL">
+						SELECT #{map.account_seq}, #{map.dutch_mem_id}, #{map.dutch_money} FROM DUAL
+				</foreach>
+			)INNER_VIEW
+	</insert>
+	
+	<!-- accountMain List 조회 -->
+	<select id="getAccountMain" parameterType="int" resultType="AccountVO">
+	SELECT ACCOUNT_SEQ, CHAT_SEQ, ACCOUNT_TOTAL,to_char(ACCOUNT_DT,'yyyy-mm-dd') AS ACCOUNT_DT , ACCOUNT_CNT, ACCOUNT_NUM, ACCOUNT_INFO, ACCOUNT_MEMO, ACCOUNT_DETAIL, MEM_ID
+	FROM ACCOUNT
+	WHERE chat_seq = #{chat_seq}
+	ORDER BY account_dt DESC
+	</select>
+	
+	<!--  accountDetail List 조회 -->
+	<select id="getAccountDetail" parameterType="int" resultType="AccountSeniorVO">
+	SELECT A.*, B.dutch_mem_id, B.dutch_money
+	FROM (
+	      SELECT *
+	      FROM ACCOUNT
+	      ) A,
+	     (
+	     SELECT * 
+	     FROM dutch
+	     )B      
+	WHERE A.account_seq = B.account_seq
+	AND A.account_seq =#{account_seq}
+	</select>
+	
+	<!-- accountVO Delete 요청 -->
+	<delete id="accountDelete" parameterType="int">
+	DELETE
+	FROM ACCOUNT
+	WHERE account_seq = #{account_seq}	
+	</delete>
+	
+	<!-- accountSearch 요청 -->
+	<select id="accountSearch" parameterType="AccountSearchVO" resultType="AccountVO">
+	SELECT ACCOUNT_SEQ, CHAT_SEQ, ACCOUNT_TOTAL,to_char(ACCOUNT_DT,'yyyy-mm-dd') AS ACCOUNT_DT , ACCOUNT_CNT, ACCOUNT_NUM, ACCOUNT_INFO, ACCOUNT_MEMO, ACCOUNT_DETAIL, MEM_ID
+	FROM ACCOUNT
+	WHERE chat_seq = #{chat_seq}	
+	<choose>
+			<when test="accountSearchStart!=null and accountSearchEnd!=null">
+			AND account_dt  BETWEEN TO_DATE(#{accountSearchStart}) AND TO_DATE(#{accountSearchEnd})
+			</when>
+			
+			<when test="accountSearchStart!=null">
+			AND account_dt  BETWEEN TO_DATE(#{accountSearchStart}) AND TO_DATE(#{accountSearchStart})
+			</when>		
+					
+	</choose>
+	<if test="searchAccountText!=null">
+		AND account_detail like '%' || #{searchAccountText} || '%'
+	</if>
+	<!-- <choose>
+			<when test="selectContent.equals('ALL')">
+			AND (
+				account_memo like '%' || #{searchAccountText} || '%'
+				OR
+				account_detail like '%' || #{searchAccountText} || '%'
+				)
+			</when>
+					
+			<when test="selectContent.equals('CATEGORY')">
+			AND account_memo like '%' || #{searchAccountText} || '%'
+			</when>
+			
+			<when test="selectContent.equals('DETAIL')">
+			AND account_detail like '%' || #{searchAccountText} || '%'
+			</when>			
+	</choose>  -->
+	ORDER BY account_dt DESC
+	
+	</select>	
+		
+</mapper>

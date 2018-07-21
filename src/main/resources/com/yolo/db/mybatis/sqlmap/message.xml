@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="message">
+	
+	<!-- 메세지 전송시 -->
+	<insert id="sendMessage" parameterType="hashmap">
+		<selectKey order="BEFORE" keyProperty="message_seq" resultType="int">
+    		SELECT MESSAGE_SEQ.NEXTVAL AS message_seq FROM DUAL
+  		</selectKey>
+		INSERT INTO MESSAGE (MESSAGE_SEQ, CHAT_SEQ, MESSAGE_MEM_ID, MESSAGE_CONTENT, MESSAGE_SORT, MESSAGE_DT)
+		VALUES (#{message_seq}, #{chat_seq}, #{message_mem_id}, #{message_content}, #{message_sort}, #{message_dt})
+	</insert>
+	
+	<!-- 안읽은 메세지 조회 -->
+	<select id="selectNotReadMessage" parameterType="Chat_nameVO" resultType="MessageVO">
+		<![CDATA[
+			SELECT MESSAGE.*
+			FROM MESSAGE, (
+			    SELECT MEM_OUTTM
+			    FROM CHAT_GROUP
+			    WHERE MEM_ID = #{mem_id}
+			    AND CHAT_SEQ = #{chat_seq}
+			) A
+			WHERE CHAT_SEQ = #{chat_seq}
+			AND MESSAGE.MESSAGE_DT > to_char(A.MEM_OUTTM, 'YYYYMMDD,AM HH:MI')
+		]]>
+	</select>
+	
+	<!-- 과거 메세지 조회 10건씩 -->
+	<select id="selectBeforeMessage" parameterType="MessageVO" resultType="MessageVO">
+		<![CDATA[
+			SELECT *
+			FROM MESSAGE
+			WHERE CHAT_SEQ = #{chat_seq}
+			AND MESSAGE_SEQ < #{message_seq}
+			AND ROWNUM <= 10
+			ORDER BY MESSAGE_SEQ DESC 
+		]]>
+	</select>
+	
+	<!-- 채팅방내의 사진 총 개수 조회 -->
+	<select id="selectImgCount" parameterType="Chat_nameVO" resultType="int">
+		SELECT COUNT(*)
+		FROM MESSAGE
+		WHERE CHAT_SEQ = #{chat_seq}
+		AND MESSAGE_SORT = '02'
+	</select>
+	
+	<!-- 채팅방내의 사진첩에 쓰일 메세지 조회 -->
+	<select id="selectImgPaging" parameterType="java.util.Map" resultType="MessageVO">
+		<![CDATA[
+		SELECT B.*
+		FROM (
+		    SELECT ROWNUM AS rnum, A.*
+		    FROM 
+		    (
+		        SELECT MESSAGE_SEQ, MESSAGE_CONTENT, MESSAGE_DT
+		        FROM MESSAGE
+		        WHERE CHAT_SEQ = #{chat_seq}
+		        AND MESSAGE_SORT = '02'
+		        ORDER BY MESSAGE_SEQ DESC
+		    ) A
+		    WHERE ROWNUM <= #{pageNum}*9
+		) B
+		WHERE B.rnum >= (#{pageNum}-1)*9 + 1
+		]]>
+	</select>
+</mapper>

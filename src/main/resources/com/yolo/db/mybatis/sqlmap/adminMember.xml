@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adminMember">
+	<!-- 회원관리 페이지 페이지 네이션-->
+	<select id="getMemberList" parameterType="java.util.Map" resultType="MemJoinInfoVO" >
+		<![CDATA[
+		SELECT X.*
+		FROM 
+           (
+               SELECT ROWNUM rnum, A.* FROM 
+                (
+                    SELECT mem.*, j.join_seq,join_certify,join_path,join_dt,join_drop,join_drop_cause , mem.mem_st "black_st"  FROM MEMBER mem LEFT JOIN blacklist b ON mem.mem_id = b.mem_id
+                    inner JOIN joininfo j ON mem.mem_id=j.mem_id
+                    WHERE  mem.mem_id LIKE #{keyword}
+                    ORDER BY mem.mem_seq DESC
+                ) A
+                WHERE ROWNUM <= #{pageNo}*10
+            )  X
+	 	WHERE 
+	 		X.rnum >= (#{pageNo}-1)*10 + 1
+		]]>	
+	</select>
+	
+	<!-- 페이지 네이션 총겟수 -->
+	<select id="getMemberListCnt" parameterType="java.util.Map" resultType="int">
+	SELECT count(*) FROM MEMBER
+	where mem_id like #{keyword}
+	</select>
+	
+	<!-- 오늘 가입한 유저 -->
+		<select id="todayRegMember" parameterType="java.util.Map" resultType="integer">
+	<![CDATA[
+		SELECT
+		COUNT(*)
+		FROM joininfo
+		WHERE join_dt >= trunc(sysdate-1)
+	]]>
+	</select>
+	
+	<!-- 오늘 탈퇴한 회원 -->
+	<select id="todayDropMember" parameterType="java.util.Map" resultType="integer">
+	<![CDATA[
+		SELECT
+		COUNT(*)
+		FROM joininfo
+		WHERE join_drop >= trunc(sysdate-1)
+	]]>
+	</select>
+	
+	<!-- 회원 블랙리스트처리 관리 -->
+	<update id="blackList" parameterType="java.util.Map">
+	UPDATE blacklist
+    SET
+	       black_st = #{link}
+	WHERE
+	    mem_id = #{mem_id}
+	</update>
+	
+	<select id="selectBlackList" parameterType="string" resultType="int">
+	    select count(*)
+		FROM
+		    blacklist
+		where mem_id =#{paramMap}
+	</select>
+
+		<insert id="insertBlackList" parameterType="string">
+		INSERT INTO blacklist (
+		    black_seq,
+		    mem_id,
+		    black_cause,
+		    black_st
+		) VALUES (
+		    black_seq.NEXTVAL,
+		    #{paramMap},
+		    '관리자 권한',
+		    'Y'
+		)
+	</insert>
+	
+		<update id="updateMemSTBlack" parameterType="java.util.Map">
+	UPDATE member
+    SET
+        mem_st= #{link}
+	WHERE
+	    mem_id =#{mem_id}
+	</update>
+
+</mapper>

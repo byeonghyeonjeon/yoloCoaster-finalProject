@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fileAdd">
+	<!-- 파일 추가-->
+	<insert id="insertFile" parameterType="File_addVO">
+		INSERT
+		INTO FILE_ADD
+		  (
+		    ADD_SEQ,    PARENT_SEQ,    ADD_ORINAME,
+		    ADD_NEWNAME,    ADD_MEM_ID,    ADD_DT,
+		    ADD_EX,    ADD_PATH
+		  )
+		  VALUES
+		  (
+		    add_seq.nextval,    #{parent_seq},    #{add_oriname,jdbcType=VARCHAR},
+		    #{add_newname,jdbcType=VARCHAR},    #{add_mem_id,jdbcType=VARCHAR},    sysdate,
+		    #{add_ex,jdbcType=VARCHAR},    #{add_path,jdbcType=VARCHAR}
+		  )
+	</insert>
+	
+	<!-- 파일 하나 검색 -->
+	<select id="selectFile" parameterType="int" resultType="File_addVO" >
+		SELECT 
+		  ADD_SEQ,
+		  PARENT_SEQ,
+		  ADD_ORINAME,
+		  ADD_NEWNAME,
+		  ADD_MEM_ID,
+		  ADD_DT,
+		  ADD_EX,
+		  ADD_PATH
+		FROM FILE_ADD 
+		where ADD_SEQ = #{add_seq}
+	</select>
+	
+	<!-- 파일리스트 검색-->
+	<select id="selectFileList" parameterType="int" resultType="File_addVO" >
+		SELECT 
+		  ADD_SEQ,
+		  PARENT_SEQ,
+		  ADD_ORINAME,
+		  ADD_NEWNAME,
+		  ADD_MEM_ID,
+		  ADD_DT,
+		  ADD_EX,
+		  ADD_PATH
+		FROM FILE_ADD 
+		where PARENT_SEQ = #{parent_seq}
+	</select>
+	
+
+	<!-- 파일삭제 -->
+	<delete id="deleteFile" parameterType="int">
+		DELETE FROM file_add
+		WHERE
+	    add_seq = #{add_seq}
+	</delete>
+	
+
+	<!-- 파일 여러개 insert -->
+	<insert id="insertFile_add_Multi" parameterType="java.util.List">
+		INSERT INTO FILE_ADD
+			(
+				ADD_SEQ,    PARENT_SEQ,    ADD_ORINAME,
+			    ADD_NEWNAME,    ADD_MEM_ID,    ADD_DT,
+			    ADD_EX,    ADD_PATH
+			)
+		SELECT ADD_SEQ.NEXTVAL, INNER_VIEW.*
+		FROM (
+		    <foreach collection="list" item="File_addVO" index="index" separator=" UNION ALL ">
+		    	SELECT #{File_addVO.parent_seq} AS parent_seq, #{File_addVO.add_oriname} AS add_oriname,
+		    	#{File_addVO.add_newname} AS add_newname, #{File_addVO.add_mem_id} AS add_mem_id, 
+		    	SYSDATE AS add_dt, #{File_addVO.add_ex} AS add_ex, #{File_addVO.add_path} AS add_path
+		    	FROM DUAL
+		    </foreach>
+		) INNER_VIEW
+	</insert>
+	
+	<!-- 파일 추가 (분류있는 경우) -->
+	<insert id="insertFileInSort" parameterType="File_addVO">
+		INSERT
+		INTO FILE_ADD
+		  (
+		    ADD_SEQ,    PARENT_SEQ,    ADD_ORINAME,
+		    ADD_NEWNAME,    ADD_MEM_ID,    ADD_DT,
+		    ADD_EX,    ADD_PATH, ADD_SORT
+		  )
+		  VALUES
+		  (
+		    add_seq.nextval,    #{parent_seq},    #{add_oriname,jdbcType=VARCHAR},
+		    #{add_newname,jdbcType=VARCHAR},    #{add_mem_id,jdbcType=VARCHAR},    sysdate,
+		    #{add_ex,jdbcType=VARCHAR},    #{add_path,jdbcType=VARCHAR},	#{add_sort}
+		  )
+	</insert>
+</mapper>

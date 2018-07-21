@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adminTravel">
+	<!-- 전체 리뷰 수 -->
+	<select id="selectTotalReviewCount" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM REVIEW
+	</select>
+	
+	<!-- 오늘 등록된 리뷰 수 -->
+	<select id="selectTodayReviewCount" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM REVIEW
+		WHERE TO_CHAR(REVIEW_DT, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
+	</select>
+	
+	<!-- 전체 태그 수 -->
+	<select id="selectTotalTagCount" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM TAG
+	</select>
+	
+	<!-- 오늘 등록된 태그 수 -->
+	<select id="selectTodayTagCount" resultType="int">
+		SELECT NVL(SUM(COUNT(*)), 0)
+		FROM TAG,
+		(
+		    SELECT REVIEW_SEQ
+		    FROM REVIEW
+		    WHERE TO_CHAR(REVIEW_DT, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
+		) A
+		WHERE TAG.MAIN_BOARD_SEQ = A.REVIEW_SEQ
+		GROUP BY A.REVIEW_SEQ
+	</select>
+	
+	<!-- 전체 메세지 수 -->
+	<select id="selectTotalMessageCount" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM MESSAGE
+	</select>
+	
+	<!-- 오늘 등록된 메세지 수 -->
+	<select id="selectTodayMessageCount" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM MESSAGE
+		WHERE MESSAGE_DT LIKE TO_CHAR(SYSDATE, 'YYYYMMDD') || '%'
+	</select>
+	
+	<!-- 리뷰 페이지네이션 처리 후 조회 -->
+	<select id="selectReview" parameterType="PageVO" resultType="ReviewVO">
+		<![CDATA[
+		SELECT *
+		FROM
+		(
+		    SELECT A.*, ROWNUM AS rn
+		    FROM
+		    (
+		        SELECT REVIEW.*
+		        FROM REVIEW
+		        ORDER BY REVIEW_DT DESC
+		    ) A
+		    WHERE ROWNUM <= #{pageNo} * 10
+		) B
+		WHERE B.rn > (#{pageNo}-1) * 10
+		]]>
+	</select>
+	
+	<!-- 리뷰 상세 조회 -->
+	<select id="selectReviewDetail" parameterType="String" resultType="ReviewVO">
+		SELECT *
+		FROM REVIEW
+		WHERE REVIEW_SEQ = #{review_seq}
+	</select>
+	
+	<!-- 리뷰 검색 총 개수 조회 -->
+	<select id="searchReviewCount" parameterType="String" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM REVIEW
+		WHERE REVIEW_TITLE LIKE '%' || #{review_title} || '%'
+	</select>
+	
+	<!-- 리뷰 검색 페이지네이션 처리-->
+	<select id="searchReview" parameterType="Map" resultType="ReviewVO">
+		<![CDATA[
+		SELECT *
+		FROM
+		(
+		    SELECT A.*, ROWNUM AS rn
+		    FROM
+		    (
+		        SELECT REVIEW.*
+		        FROM REVIEW
+		        WHERE REVIEW_TITLE LIKE '%' || #{review_title} || '%'
+		        ORDER BY REVIEW_DT DESC
+		    ) A
+		    WHERE ROWNUM <= #{pageNo} * 10
+		) B
+		WHERE B.rn > (#{pageNo}-1) * 10
+		]]>
+	</select>
+	
+	
+	<!-- 태그관리 -->
+	<!-- 태그 조회 페이지네이션 처리 -->
+	<select id="selectTag" parameterType="PageVO" resultType="TagCountVO">
+		<![CDATA[
+		SELECT *
+		FROM
+		(
+		    SELECT A.*, ROWNUM AS rn
+		    FROM
+		    (
+		        SELECT COUNT(*) AS TAG_COUNT, TAG_CONTENT
+		        FROM TAG
+		        GROUP BY TAG_CONTENT
+		    ) A
+		    WHERE ROWNUM <= #{pageNo} * 10
+		) B
+		WHERE B.rn > (#{pageNo}-1) * 10
+		]]>
+	</select>
+	
+	<!-- 태그 삭제 -->
+	<delete id="deleteTag" parameterType="String">
+		DELETE
+		FROM TAG
+		WHERE TAG_CONTENT = #{tag_content}
+	</delete>
+	
+	<!-- 태그 검색 총 개수 조회 -->
+	<select id="searchTagCount" parameterType="String" resultType="int">
+		SELECT NVL(SUM(COUNT(*)), 0)
+		FROM TAG
+		WHERE TAG_CONTENT LIKE '%' || #{tag_content} || '%'
+		GROUP BY TAG_CONTENT
+	</select>
+	
+	<!-- 태그 검색 페이지네이션 처리 -->
+	<select id="searchTag" parameterType="Map" resultType="TagCountVO">
+        <![CDATA[
+		SELECT *
+		FROM
+		(
+		    SELECT A.*, ROWNUM AS rn
+		    FROM
+		    (	
+		    	SELECT COUNT(*) AS TAG_COUNT, TAG_CONTENT
+		        FROM TAG
+		        WHERE TAG_CONTENT LIKE '%' || #{tag_content} || '%'
+		        GROUP BY TAG_CONTENT
+		    ) A
+		    WHERE ROWNUM <= #{pageNo} * 10
+		) B
+		WHERE B.rn > (#{pageNo}-1) * 10
+		]]>
+	</select>
+	
+	<!-- 태그 관리의 페이지네이션 처리를 위한 총 개수 조회 -->
+	<select id="selectTotalTagCountCount" resultType="int">
+		SELECT MAX(rn)
+		FROM
+		(
+			SELECT A.*, ROWNUM AS rn
+			FROM
+			(
+				SELECT NVL(COUNT(*), 0)
+				FROM TAG
+				GROUP BY TAG_CONTENT
+			) A
+		) B
+	</select>
+	
+	<!-- 카테고리 관리 -->
+	<!-- 총 카테고리 수 -->
+	<select id="selectTotalCategory" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM CATEGORY
+	</select>
+	
+	<!-- 활성화 카테고리 수 -->
+	<select id="selectTotalCategoryY" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM CATEGORY
+		WHERE CATE_ST = 'Y'
+	</select>
+	
+	<!-- 비활성화 카테고리 수 -->
+	<select id="selectTotalCategoryN" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM CATEGORY
+		WHERE CATE_ST = 'N'
+	</select>
+	
+	<!-- 카테고리 조회 -->
+	<select id="selectCategory" parameterType="PageVO" resultType="CategoryVO">
+		<![CDATA[
+		SELECT *
+		FROM
+		(
+		    SELECT A.*, ROWNUM AS rn
+		    FROM
+		    (	
+		    	SELECT *
+			    FROM CATEGORY
+			    ORDER BY CATE_DT DESC
+		    ) A
+		    WHERE ROWNUM <= #{pageNo} * 10
+		) B
+		WHERE B.rn > (#{pageNo}-1) * 10
+		]]>
+	</select>
+	
+	<!-- 해당 카테고리가 있는지 조회 -->
+	<select id="selectCategoryByCateName" parameterType="CategoryVO" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM CATEGORY
+		WHERE CATE_NAME = #{cate_name}
+	</select>
+	
+	<!-- 카테고리 추가 -->
+	<insert id="insertCategory" parameterType="CategoryVO">
+		INSERT INTO CATEGORY
+			(
+				CATE_SEQ, CATE_NAME, CATE_DT, CATE_ST
+			)
+		VALUES
+			(
+				CATE_SEQ.NEXTVAL, #{cate_name}, SYSDATE, 'Y'
+			)
+	</insert>
+	
+	<!-- 카테고리 삭제 -->
+	<delete id="deleteCategory" parameterType="CategoryVO">
+		DELETE
+		FROM CATEGORY
+		WHERE CATE_SEQ = #{cate_seq}
+	</delete>
+	
+	<!-- 카테고리 활성화 -->
+	<update id="updateCategoryToY" parameterType="CategoryVO">
+		UPDATE CATEGORY
+		SET CATE_ST = 'Y'
+		WHERE CATE_SEQ = #{cate_seq}
+	</update>
+	
+	<!-- 카테고리 비활성화 -->
+	<update id="updateCategoryToN" parameterType="CategoryVO">
+		UPDATE CATEGORY
+		SET CATE_ST = 'N'
+		WHERE CATE_SEQ = #{cate_seq}
+	</update>
+	
+	<!-- 카테고리 검색시 총 개수-->
+	<select id="searchCategoryCount" parameterType="CategoryVO" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM CATEGORY
+		WHERE CATE_NAME LIKE '%' || #{cate_name} || '%'
+	</select>
+	
+	<!-- 카테고리 검색 -->
+	<select id="searchCategory" parameterType="Map" resultType="CategoryVO">
+		<![CDATA[
+		SELECT *
+		FROM
+		(
+		    SELECT A.*, ROWNUM AS rn
+		    FROM
+		    (	
+		    	SELECT *
+				FROM CATEGORY
+				WHERE CATE_NAME LIKE '%' || #{cate_name} || '%'
+			    ORDER BY CATE_DT DESC
+		    ) A
+		    WHERE ROWNUM <= #{pageNo} * 10
+		) B
+		WHERE B.rn > (#{pageNo}-1) * 10
+		]]>
+	</select>
+	
+	
+	
+	
+	
+</mapper>

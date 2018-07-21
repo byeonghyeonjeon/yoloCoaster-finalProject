@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="likeArea">
+	
+	<!-- 해당 게시판의 글 수를 가져옴 -->
+	<select id="selectArea" parameterType="String" resultType="AreaVO" >
+		    SELECT AREACODE, AREANAME FROM AREA where AREACODE = #{areacode}
+	</select>
+	
+	<select id="selectAreaCode" parameterType="String" resultType="String" >
+		    SELECT AREACODE FROM AREA where AREANAME = #{param}
+	</select>
+	
+	<select id="selectLikeAreaList" parameterType="String" resultType="Like_areaVO" >
+		       SELECT AREA_SEQ, MEM_ID, AREA_CODE FROM LIKE_AREA where MEM_ID = #{mem_id}
+	</select>
+	
+	<delete id="deleteLikeArea" parameterType="String">
+	    DELETE
+		FROM LIKE_AREA
+		WHERE MEM_ID = #{mem_id}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Bootstrap Example</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<style>
+		/* Remove the navbar's default margin-bottom and rounded borders */
+
+		.navbar {
+			margin-bottom: 0;
+			border-radius: 0;
+		}
+
+		/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+
+		.row.content {
+			height: 100%;
+		}
+
+		/* Set gray background color and 100% height */
+
+		.sidenav {
+			padding-top: 20px;
+			height: 100%;
+		}
+
+		/* Set black background color, white text and some padding */
+
+		footer {
+			background-color: #555;
+			color: white;
+			padding: 15px;
+		}
+
+		/* On small screens, set height to 'auto' for sidenav and grid */
+
+		@media screen and (max-width: 767px) {
+			.sidenav {
+				height: auto;
+				padding: 15px;
+			}
+			.row.content {
+				height: auto;
+			}
+		}
+
+		/*카테고리 버튼 폭*/
+
+		.cate_btn {
+
+		}
+
+		/*리스트 이미지*/
+		.list_img {
+			width: 120px;
+			height: 120px;
+			float: left;
+		}
+		/*리스트 제목*/
+		.list_title {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 1;			/* 라인수 (빨강되는게 맞음)*/
+			-webkit-box-orient: vertical;
+			word-wrap: break-word;
+			line-height: 1.2em;
+			height: 1.2em;	/* line-height 가 1.2em 이고 3라인을 자르기 때문에 height는 1.2em * 3 = 3.6em */
+		}
+		/*리스트 주소*/
+		.list_addr {
+			color: gray;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;			/* 라인수 (빨강되는게 맞음)*/
+			-webkit-box-orient: vertical;
+			word-wrap: break-word;
+			line-height: 1.2em;
+			height: 2.4em;	/* line-height 가 1.2em 이고 3라인을 자르기 때문에 height는 1.2em * 3 = 3.6em */
+		}
+
+	</style>
+</head>
+
+<body>
+
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+				<a class="navbar-brand" href="#">Logo</a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#">About</a></li>
+					<li><a href="#">Projects</a></li>
+					<li><a href="#">Contact</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid text-center">
+		<div class="row content">
+			<div class="col-sm-2 sidenav">
+				<p><a href="#">Link</a></p>
+				<p><a href="#">Link</a></p>
+				<p><a href="#">Link</a></p>
+			</div>
+
+
+			<div class="col-sm-8 text-left">
+				<h1>Welcome</h1>
+
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+				<!--추천 카테고리-->
+				<div class="">
+					<div class="">
+						<h3>추천 카테고리</h3>
+						<!-- 카테고리 첫번째 row -->
+						<div class="row">
+							<div class="col-md-1 col-sm-1 col-xs-1"></div>
+							<div class="col-md-10 col-sm-10 col-xs-10 ">
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+							</div>
+
+						</div>
+						<!-- end 카테고리 첫번째 row -->
+
+						<!-- 카테고리 두번째 row -->
+						<div class="row">
+							<div class="col-md-1 col-sm-1 col-xs-1"></div>
+							<div class="col-md-10 col-sm-10 col-xs-10 ">
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+								<div class="col-md-2 col-sm-4 col-xs-6">
+									<button type="button" class="btn btn-default btn-lg btn-block">서울</button>
+								</div>
+							</div>
+
+						</div>
+						<!-- end 카테고리 두번째 row -->
+					</div>
+				</div>
+				<!--end 추천 카테고리-->
+				<hr>
+				<!--관심 지역 기반 추천 여행지-->
+				<div class="">
+					<div class="">
+						<h3>관심지역 기반 추천 여행지</h3>
+						<h5 style="color:gray;"> &nbsp; 71곳의 여행지</h5>
+					</div>
+					<!--row  첫번째 행 -->
+					<div class="row">
+
+						<!-- 여행지 1번째 -->
+						<div class="col-lg-6 col-xs-12">
+							<div class="col-md-2.5"><img class="img-rounded list_img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa_xz1o-6yN-c2SK8LF2gRhrC_5_t56oSiP_OFBS_NBNWQ5ERB"></div>
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<a href="#">
+									<!--text overFlow 1줄 STYLE-->
+									<h4 class="list_title">
+										1. 전주 한옥마을ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ</h4>
+								</a>
+								<!--text overFlow 2줄 STYLE-->
+								<div class="col-md-12 col-sm-12 col-xs-12 list_addr"> 전라북도 전주시 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥
+								</div>
+								<br><br>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span class="glyphicon glyphicon-heart-empty" aria-hidden="true" style="font-size:30px;"></span>
+										<span class="badge">42</span>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span class="glyphicon glyphicon-comment" aria-hidden="true" style="font-size:30px;"></span>
+										<span class="badge">42</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- end 여행지 1번째 -->
+						<!-- 여행지 2번째 -->
+							<div class="col-lg-6 col-xs-12">
+							<div class="col-md-2.5"><img class="img-rounded list_img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa_xz1o-6yN-c2SK8LF2gRhrC_5_t56oSiP_OFBS_NBNWQ5ERB"></div>
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<a href="#">
+									<!--text overFlow 1줄 STYLE-->
+									<h4 class="list_title">
+										1. 전주 한옥마을ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ</h4>
+								</a>
+								<!--text overFlow 2줄 STYLE-->
+								<div class="col-md-12 col-sm-12 col-xs-12 list_addr"> 전라북도 전주시 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥
+								</div>
+								<br><br>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span class="glyphicon glyphicon-heart-empty" aria-hidden="true" style="font-size:30px;"></span>
+										<span class="badge">42</span>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span class="glyphicon glyphicon-comment" aria-hidden="true" style="font-size:30px;"></span>
+										<span class="badge">42</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- end 여행지 2번째 -->
+					</div>
+					<!-- end row 첫번째 행-->
+					<br>
+					<!-- row 두번째 행-->
+					<div class="row">
+
+						<!-- 여행지 3번째 -->
+							<div class="col-lg-6 col-xs-12">
+							<div class="col-md-2.5"><img class="img-rounded list_img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa_xz1o-6yN-c2SK8LF2gRhrC_5_t56oSiP_OFBS_NBNWQ5ERB"></div>
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<a href="#">
+									<!--text overFlow 1줄 STYLE-->
+									<h4 class="list_title">
+										1. 전주 한옥마을ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ</h4>
+								</a>
+								<!--text overFlow 2줄 STYLE-->
+								<div class="col-md-12 col-sm-12 col-xs-12 list_addr"> 전라북도 전주시 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥
+								</div>
+								<br><br>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span class="glyphicon glyphicon-heart-empty" aria-hidden="true" style="font-size:30px;"></span>
+										<span class="badge">42</span>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span class="glyphicon glyphicon-comment" aria-hidden="true" style="font-size:30px;"></span>
+										<span class="badge">42</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- end 여행지 3번째 -->
+
+						<!-- 여행지 4번재 -->
+							<div class="col-lg-6 col-xs-12">
+							<div class="col-md-2.5"><img class="img-rounded list_img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa_xz1o-6yN-c2SK8LF2gRhrC_5_t56oSiP_OFBS_NBNWQ5ERB"></div>
+							<div class="col-md-8 col-sm-8 col-xs-8">
+								<a href="#">
+									<!--text overFlow 1줄 STYLE-->
+									<h4 class="list_title">
+										1. 전주 한옥마을ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ</h4>
+								</a>
+								<!--text overFlow 2줄 STYLE-->
+								<div class="col-md-12 col-sm-12 col-xs-12 list_addr"> 전라북도 전주시 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥 전주비빔밥 전주콩나물국밥
+								</div>
+								<br><br>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span class="glyphicon glyphicon-heart-empty" aria-hidden="true" style="font-size:30px;"></span>
+										<span class="badge">42</span>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<span class="glyphicon glyphicon-comment" aria-hidden="true" style="font-size:30px;"></span>
+										<span class="badge">42</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- end 여행지 4번째 -->
+					</div>
+					<!-- end row 두번째 행-->
+					<br>
+					<!--리스트 더보기-->
+					<div class="row">
+						<div class="col-md-9"></div>
+						<div class="col-md-3">
+							<button type="button" class="btn btn-default btn-lg">
+ 							 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 리스트 더보기
+							</button>
+						</div>
+					</div>
+					<!--end 리스트 더보기-->
+				</div>
+				<!-- end 관심 지역 기반 추천 여행지-->
+
+				<hr>
+				<!--프로필 기반 추천 여행지-->
+
+				<!-- end 프로필 기반 추천 여행지-->
+
+				<hr>
+				<!--지역 축제 정보-->
+
+				<!-- end 지역 축제 정보-->
+				<hr>
+
+				<h3>Test</h3>
+				<p>Lorem ipsum...</p>
+			</div>
+			<div class="col-sm-2 sidenav">
+				<div class="well">
+					<p>ADS</p>
+				</div>
+				<div class="well">
+					<p>ADS</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer class="container-fluid text-center">
+		<p>Footer Text</p>
+	</footer>
+
+</body>
+
+</html>

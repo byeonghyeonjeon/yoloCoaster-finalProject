@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Bootstrap Example</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<style>
+		/* Set black background color, white text and some padding */
+
+		footer {
+			background-color: #555;
+			color: white;
+			padding: 15px;
+		}
+
+	</style>
+</head>
+
+<body>
+
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+				<a class="navbar-brand" href="#">Logo</a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#">Messages</a></li>
+				</ul>
+				<form class="navbar-form navbar-right" role="search">
+					<div class="form-group input-group">
+						<input type="text" class="form-control" placeholder="Search..">
+						<span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+              <span class="glyphicon glyphicon-search"></span>
+						</button>
+						</span>
+					</div>
+				</form>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#"><span class="glyphicon glyphicon-user"></span> My Account</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container text-center">
+		<div class="row">
+			<!-- 채팅방 -->
+			<div class="col-sm-5 well">
+				<div class="well">
+					<p><a href="#">My Profile</a></p>
+					<img src="bird.jpg" class="img-circle" height="65" width="65" alt="Avatar">
+				</div>
+				<div class="well">
+					<p><a href="#">Interests</a></p>
+					<p>
+						<span class="label label-default">News</span>
+						<span class="label label-primary">W3Schools</span>
+						<span class="label label-success">Labels</span>
+						<span class="label label-info">Football</span>
+						<span class="label label-warning">Gaming</span>
+						<span class="label label-danger">Friends</span>
+					</p>
+				</div>
+				<div class="alert alert-success fade in">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+					<p><strong>Ey!</strong></p>
+					People are looking at your profile. Find out who.
+				</div>
+				<p><a href="#">Link</a></p>
+				<p><a href="#">Link</a></p>
+				<p><a href="#">Link</a></p>
+			</div>
+			<!-- end 채팅방 -->
+
+
+			<!-- 캘린더 투표 .. 부가기능 -->
+			<div class="col-sm-5 well" style="height:500px;">
+
+				<div class="row">
+					
+						<div class="col-sm-12 well" style="text-align:left;">
+							<div class="col-sm-2">
+								<img src="bird.jpg" class="img-circle" height="65" width="65" alt="Avatar">
+							</div>
+							<div class="col-sm-8">
+								<h4>한화 이글스</h4>
+								<p>가드아아아!!</p>
+							</div>
+						</div>
+                        
+                        <div class="col-sm-12 well " style="text-align:left;">
+						
+							<div class="col-sm-12">
+								<h4><strong>오늘 머 먹? 오늘 머 먹?</strong></h4><br>
+                                <div class="list-group col-sm-12 ">
+                                  <a href="#" class="list-group-item" style="width:block;"><span class="glyphicon glyphicon-ok" aria-hidden="true">&nbsp;</span>First item</a>
+                                  <a href="#" class="list-group-item">Second item</a>
+                                  <a href="#" class="list-group-item">Third item</a>
+                                </div>
+							</div>
+						</div>
+					
+						<button class="btn btn-default" type="button">투표하기</button>
+                        <!--toggle??-->
+                        <!--투표 한경우, 투표리스트 비활성, and 다시 투표하기로 text변경하기 -->
+                        <button class="btn btn-default" type="button">다시 투표하기</button>
+                   
+                        <!--투표 생성자만 보이게 만들기 -->
+                        <button class="btn btn-default" type="button">투표 삭제</button>
+                        <button class="btn btn-default" type="button">투표 마감</button>                    
+              
+                    
+				</div>
+			</div>
+			<!-- end 캘린더 투표 .. 부가기능 -->
+
+
+
+			<!--오른쪽 메뉴바-->
+			<div class="col-sm-2 well">
+				<div class="">
+					<button class="btn btn-default btn-block">캘린더</button>
+				</div>
+				<div class="">
+					<button class="btn btn-default btn-block">투표</button>
+				</div>
+				<div class="">
+					<button class="btn btn-default btn-block">가계부</button>
+				</div>
+				<div class="">
+					<button class="btn btn-default btn-block">더치페이</button>
+				</div>
+				<div class="">
+					<button class="btn btn-default btn-block">사진첩</button>
+				</div>
+				<div class="">
+					<button class="btn btn-default btn-block">사다리</button>
+				</div>
+				<div class="">
+					<button class="btn btn-default btn-block">게시판</button>
+				</div>
+				<div class="">
+					<button class="btn btn-default btn-block">친구초대</button>
+				</div>
+			</div>
+			<!--end 오른쪽 메뉴바-->
+		</div>
+	</div>
+
+	<footer class="container-fluid text-center">
+		<p>Footer Text</p>
+	</footer>
+
+</body>
+
+</html>

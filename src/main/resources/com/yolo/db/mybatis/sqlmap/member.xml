@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+
+	<!-- 회원에게  필요한 정보 -->
+
+	<!--회원 개인 정보 -->
+	<select id="selectMemberInfo" parameterType="MemberVO" resultType="MemberVO">
+		SELECT 
+			*
+		FROM 
+			member 
+		WHERE
+			MEM_ID=#{mem_id}
+	</select>
+	
+	<!--여행지 즐겨찾기 추가-->
+	<insert id="insertBookmarkArea" parameterType="Bookmark_areaVo">
+		INSERT INTO 
+			bookmark_area(
+			BOOKMARK_AREA_SEQ, MEM_ID, TITLE, SIGUNGUCODE, AREACODE, CONTENTID, FIRSTIMAGE2
+		)VALUES (
+			BOOKMARK_AREA_SEQ,#{mem_id},#{title},#{sigungucode},#{areacode},#{contentid},#{firstimage2}
+		)
+	</insert>
+	
+	<!--여행지 즐겨찾기 조회-->
+	<select id="selectBookmarkArea" parameterType="Bookmark_areaVO">
+		SELECT 
+			* 
+		FROM 
+			bookmark_area
+		WHERE 
+			mem_id=#{mem_id}
+	</select>
+	
+	<!--여행지 즐겨찾기 수정-->
+	<update id="updateBookmarkArea" parameterType="Bookmark_areaVO">
+		UPDATE bookmark_area 
+		SET
+			mem_id=#{mem_id}, 
+			title=#{title}, 
+			sigungucode=#{sigungucode}, 
+			areacode=#{areacode}, 
+			contentid=#{contentid}, 
+			firstimage2=#{firstimage2}
+		WHERE 
+			BOOKMARK_AREA_SEQ =#{bookmark_area_seq}
+	</update>
+	
+	<!--여행지 즐겨찾기 삭제-->
+	<delete id="deleteBookmarkArea" parameterType="int">
+		DELETE
+		FROM
+			bookmark_area
+		WHERE
+			BOOKMARK_AREA_SEQ =#{link}
+	</delete>
+	
+
+	
+	
+	
+	
+	<!--로그인상태정보 : 로그인할때마다 갱신-->
+	<!--로그인정보 만들기 : 회원가입하면 바로 만들어줘야합니다-->
+	<insert id="insertLoginInfo" parameterType="MemberVo">
+		insert into logininfo (
+			LOGIN_SEQ,MEM_ID, LOGIN_ST ,LOGIN_DT ,LOGOUT_DT
+		) values ( 
+			LOGIN_SEQ.nextval, #{MEM_ID},#{LOGIN_ST} ,#{LOGIN_DT} ,#{LOGOUT_DT}
+		)
+	</insert>
+	
+	<!--로그인시 정보 업데이트 : 로그아웃시 업데이트-->
+	<update id="updateLoginInfo" parameterType="LoginInfoVO">
+		update logininfo
+		set
+			login_st=#{login_st}
+			logout_dt=#{logout_dt}
+		where
+			login_seq=#{login_seq}
+		and
+			mem_id=#{mem_id}
+	</update>
+	
+	
+	<!--LIKE_AREA  관심지역-->
+	<!--관심지역 추가  -->
+	<insert id="insertLikeArea" parameterType="Like_areaVO">
+		insert into like_area (
+			area_seq, mem_id, area_code
+		) values(
+			area_seq.nextval,#{mem_id},#{area_code}
+		)
+	</insert>
+	
+	<!--관심지역 수정-->
+	<update id="updateLikeArea" parameterType="Like_areaVO">
+		update like_area 
+		set
+			area_code=#{area_code}
+		where
+			area_seq=#{area_seq}
+	</update>
+		
+	<!--일정 즐겨찾기  -->
+	<insert id="insertBookmarkSche" parameterType="Bookmark_scheVO">
+		insert into bookmark_sche
+			(bookmark_seq,mem_id,schedule_seq
+		) value (
+			bookmark_seq.nextval,#{mem_id},#{schedule_seq})
+	</insert>
+	
+	<!-- 아이디 중복검사 -->
+	<select id="idCheck" parameterType="String" resultType="Integer">
+		SELECT count(*)
+		FROM Member
+		WHERE mem_id = #{mem_id}
+	</select>
+	
+	<select id="getBookmarkList" parameterType="String" resultType="Bookmark_areaVO">
+		SELECT 
+		  BOOKMARK_AREA_SEQ,
+		  MEM_ID,
+		  TITLE,
+		  SIGUNGUCODE,
+		  AREACODE,
+		  CONTENTID,
+		  FIRSTIMAGE2
+		FROM BOOKMARK_AREA 
+		WHERE mem_id =#{mem_id}
+	</select>
+	
+	<select id="checkMemPass" parameterType="MemberVO" resultType="int">
+		select count(*)
+		from member
+		where mem_id=#{mem_id}
+		and mem_pass=#{mem_pass}
+	</select>
+	
+	<update id="updateMemberInfo" parameterType="MemberVO">
+	UPDATE MEMBER
+	SET 
+		mem_mail      = #{mem_mail}
+		, mem_pass    = #{mem_pass}
+		, mem_add1    = #{mem_add1}
+		, mem_add2    = #{mem_add2}
+		, mem_tel     = #{mem_tel}
+		, mem_age     = #{mem_age}
+		, mem_nick    = #{mem_nick}
+		, mem_profile = #{mem_profile}
+	WHERE MEM_ID      = #{mem_id}
+	</update>
+	
+	<update id="updateMemeberSt" parameterType="String">
+	UPDATE member
+    SET
+        mem_st= 'N'
+	WHERE
+	    mem_id =#{mem_id}
+	</update>
+	
+	
+</mapper>

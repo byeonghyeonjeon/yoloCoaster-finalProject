@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <style>
+    nav.navbar {
+      background: linear-gradient(to right, #a1f276, #5ce09b);
+    }
+
+    .tobNavbarName {
+      color: black;
+    }
+
+    .nav>li>a:focus,
+    .nav>li>a:hover {
+      background-color: #eee;
+    }
+
+    .navbar-header .navbar-toggle {
+      background-color: #1BA39C;
+    }
+
+    .navbar-header .icon-bar {
+      background-color: #5ce09b;
+    }
+
+    .navbar-brand img {
+      width: 10%;
+    }
+
+    #searchForm {
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      #content {
+        padding-top: 160px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      #content,
+      #leftbar,
+      #rightbar {
+        padding-top: 110px;
+      }
+    }
+
+    #footer img {
+      width: 60px;
+    }
+
+    #footer table {
+      display: inline-block;
+    }
+
+    #footer td {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  </style>
+
+  <!-- 기본 템플릿 css 수정 ㄴㄴ -->
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */
+
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+
+    .row.content {
+      height: 450px
+    }
+
+    /* Set gray background color and 100% height */
+
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* Set black background color, white text and some padding */
+
+    footer {
+      background-color: #ffffff;
+      color: white;
+      padding: 15px;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {
+        height: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 상단 메뉴바 -->
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+
+        <!-- id가 topNavbar인 nav를 목록으로 만듬 -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <!-- index페이지로 이동 -->
+        <a class="navbar-brand" href="index.html">
+          <span>욜로코스터</span>
+        </a>
+      </div>
+
+      <!-- 메뉴 목록 -->
+      <div class="collapse navbar-collapse navbar-right" id="topNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#" class="tobNavbarName">회사개요</a>
+            <li><a href="#" class="tobNavbarName">지역검색</a></li>
+            <li><a href="#" class="tobNavbarName">축제검색</a></li>
+            <li><a href="#" class="tobNavbarName">일정검색</a></li>
+            <li><a href="#" class="tobNavbarName">채팅방</a></li>
+            <li><a href="#" class="tobNavbarName">게시판</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle tobNavbarName" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-user"></i><span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#" class="tobNavbarName">친구목록</a></li>
+                <li><a href="#" class="tobNavbarName">마이페이지</a></li>
+                <li><a href="#" class="tobNavbarName">로그인</a></li>
+                <li><a href="#" class="tobNavbarName">회원가입</a></li>
+              </ul>
+            </li>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 검색창 -->
+    <div class="container-fluid">
+      <form class="navbar-form" action="" id="searchForm">
+        <select class="form-control">
+          <option>키워드</option>
+          <option>태그</option>
+        </select>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="검색할 내용을 입력하세요" id="searchText" name="search">
+          <div class="input-group-btn">
+            <button class="btn btn-default" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </nav>
+
+
+
+
+
+  <div class="container-fluid text-center">
+    <div class="row content">
+
+
+      <!-- left 바 -->
+      <div class="col-sm-2 sidenav" id="leftbar">
+
+
+
+      </div>
+
+
+      <!-- 가운데 바디 -->
+      <div class="col-sm-8 text-left" id="content">
+        <h1>Welcome</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint
+          occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <hr>
+        <h3>Test</h3>
+        <p>Lorem ipsum...</p>
+      </div>
+
+
+      <!-- right 바 -->
+      <div class="col-sm-2 sidenav" id="rightbar">
+        <div class="well">
+          <p>ADS</p>
+        </div>
+        <div class="well">
+          <p>ADS</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- footer -->
+  <footer class="container-fluid text-center" id="footer">
+    <div class="row">
+      <table>
+        <tr>
+          <td><a href="메인페이지로이동"><img src="logo/logo2.png" class="img-responsive img-rounded"></a></td>
+          <td><a href="https://developers.naver.com/products/search/" target="_blank"><img src="logo/blog.png" class="img-responsive img-rounded"></a></td>
+          <td><a href="https://developers.naver.com/products/map/" target="_blank"><img src="logo/map.png" class="img-responsive img-rounded"></a></td>
+          <td><a href="https://cloud.google.com/vision/?hl=ko&utm_source=google&utm_medium=cpc&utm_campaign=japac-KR-all-ko-dr-bkws-all-super-trial-e-dr-1003987&utm_content=text-ad-none-none-DEV_c-CRE_249736095975-ADGP_Hybrid+%7C+AW+SEM+%7C+BKWS+~+T1+%7C+EXA+%7C+ML+%7C+1%3A1+%7C+KR+%7C+ko+%7C+Vision+%7C+google+cloud+vision+%7C+en-KWID_43700030027797702-kwd-203288730967&userloc_1009880&utm_term=KW_google%20cloud%20vision&gclid=EAIaIQobChMIzsCRg4fQ2wIVXQYqCh3SFgOnEAAYASAAEgLi8_D_BwE&dclid=COOR-IOH0NsCFQabvQodphAKkw" target="_blank"><img src="logo/google.png" class="img-responsive img-rounded"></a></td>
+          <td><a href="https://developers.facebook.com/docs/facebook-login/v2.2?locale=ko_KR" target="_blank"><img src="logo/facebook.png" class="img-responsive img-rounded"></a></td>
+          <td><a href="https://www.instagram.com/explore/tags/여행/" target="_blank"><img src="logo/insta.png" class="img-responsive img-rounded"></a></td>
+          <td><a href="http://api.visitkorea.or.kr/main.do" target="_blank"><img src="logo/travle.png" class="img-responsive img-rounded"></a></td>
+        </tr>
+      </table>
+    </div>
+
+
+
+
+  </footer>
+
+</body>
+
+</html>

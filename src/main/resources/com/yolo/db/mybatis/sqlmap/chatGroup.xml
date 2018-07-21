@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chatGroup">
+	<!-- 새로운 채팅방 생성시 -->
+	<insert id="insertChat_group" parameterType="java.util.List">
+		INSERT INTO CHAT_GROUP (GROUP_SEQ, CHAT_SEQ, MEM_ID, MEM_OUTTM)
+			SELECT GROUP_SEQ.NEXTVAL, INNER_VIEW.*
+			FROM (
+			    <foreach collection="list" item="Chat_groupVO" index="index" separator=" UNION ALL ">
+			    	SELECT #{Chat_groupVO.chat_seq} AS chat_seq, #{Chat_groupVO.mem_id} AS mem_id, SYSDATE AS mem_outtm
+			    	FROM DUAL
+			    </foreach>
+			) INNER_VIEW
+	</insert>
+	
+	<!-- 채팅방 조회 -->
+	<select id="checkChattingRoom" parameterType="java.util.Map" resultType="ChatGroupCountVO">
+		SELECT CHAT_SEQ, COUNT(*) AS CHAT_COUNT
+		FROM CHAT_GROUP
+		WHERE CHAT_SEQ IN (
+		    SELECT CHAT_GROUP.CHAT_SEQ
+		    FROM CHAT_GROUP,
+		    (
+		        SELECT CHAT_SEQ
+		        FROM CHAT_GROUP
+		        WHERE MEM_ID = #{mem_id}
+		    ) A
+		    WHERE CHAT_GROUP.CHAT_SEQ = A.CHAT_SEQ
+		    AND CHAT_GROUP.MEM_ID = #{friend_id}
+		)
+		GROUP BY CHAT_SEQ
+	</select>
+	
+	<!-- 채팅방 나가기 -->
+	<delete id="deleteChattingRoom" parameterType="java.util.Map">
+		DELETE FROM CHAT_GROUP
+		WHERE MEM_ID = #{mem_id}
+		AND CHAT_SEQ = #{chat_seq}
+	</delete>
+	
+	<!-- 채팅방 disconnect시 해당 유저의 채팅방 나간시간 업데이트 -->
+	<update id="updateMem_outtm" parameterType="Chat_groupVO">
+		UPDATE CHAT_GROUP
+		SET MEM_OUTTM = SYSDATE
+		WHERE MEM_ID = #{mem_id}
+		AND CHAT_SEQ = #{chat_seq}
+	</update>
+	
+	<!-- 채팅방 멤버 조회시 -->
+	<select id="selectChattingRoomMember" parameterType="Chat_groupVO" resultType="FriendMemberVO">
+		SELECT A.MEM_ID AS mem_id, MEMBER.MEM_NAME mem_name, MEMBER.MEM_NICK mem_nick, MEMBER.MEM_PROFILE mem_profile, MEMBER.MEM_ST mem_st
+		FROM MEMBER,
+		(
+		    SELECT MEM_ID
+		    FROM CHAT_GROUP
+		    WHERE CHAT_SEQ = #{chat_seq}
+		    AND MEM_ID != #{mem_id}
+		) A
+		WHERE MEMBER.MEM_ID = A.MEM_ID
+		AND MEMBER.MEM_ST = 'Y'
+	</select>
+	
+	<!-- 채팅방내에서 친구목록 조회시 -->
+	<select id="selectFriendNotInChattingRoom" parameterType="Chat_groupVO" resultType="FriendMemberVO">
+		SELECT MEM_ID mem_id,MEM_NAME mem_name, MEM_NICK mem_nick, MEM_PROFILE mem_profile, MEM_ST mem_st
+		FROM MEMBER,
+		(
+		    SELECT FRIEND_ID
+		    FROM FRIEND
+		    WHERE MEM_ID = #{mem_id}
+		    AND FRIEND_REQUEST = 'Y'
+		    AND FRIEND_ID NOT IN
+		    (
+		        SELECT MEM_ID
+		        FROM CHAT_GROUP
+		        WHERE CHAT_SEQ = #{chat_seq}
+		        AND MEM_ID != #{mem_id}
+		    )
+		) A
+		WHERE MEM_ID = A.FRIEND_ID
+		AND MEM_ST = 'Y'
+	</select>
+	
+	<!-- 채팅방으로 초대시 -->
+	<insert id="inviteChat_group" parameterType="Chat_groupVO">
+		INSERT INTO CHAT_GROUP (GROUP_SEQ, CHAT_SEQ, MEM_ID, MEM_OUTTM)
+		VALUES (GROUP_SEQ.NEXTVAL, #{chat_seq}, #{mem_id}, SYSDATE)
+	</insert>
+	<insert id="inviteChat_name" parameterType="Chat_nameVO">
+		INSERT INTO CHAT_NAME (CHAT_NAME_SEQ, CHAT_SEQ, MEM_ID, NAME)
+		VALUES (CHAT_NAME_SEQ.NEXTVAL, #{chat_seq}, #{mem_id}, #{name})
+	</insert>
+</mapper>

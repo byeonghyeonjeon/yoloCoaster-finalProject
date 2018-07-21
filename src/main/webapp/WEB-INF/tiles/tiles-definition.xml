@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<!-- 관리자  -->
+	<definition name="admin.basic.layout" template="/WEB-INF/views/layout/layout_admin.jsp">
+		<put-attribute name="title" value="관리자 페이지" />
+		<put-attribute name="header" value="/WEB-INF/views/content/admin/adminHeader.jsp" />
+		<put-attribute name="leftbar" value="" />
+		<put-attribute name="rightbar" value="" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="" />
+	</definition>
+	
+	<definition name="adminNoticeDetail" extends="admin.basic.layout">
+		<put-attribute name="title" value="관리자 게시글 상세보기"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/admin/menu/board/adminNoticeDetail.jsp" />
+	</definition>	
+	
+	
+	<!-- index 화면 -->
+	<definition name="adminIndex" extends="admin.basic.layout">
+		<put-attribute name="content" value="/WEB-INF/views/content/admin/menu/board/adminNotice.jsp" />
+		<put-attribute name="title" value="관리자 페이지"/>		
+	</definition>
+	
+	<!-- 통계보기 화면 -->
+	<definition name="adminStat" extends="admin.basic.layout">
+		<put-attribute name="content" value="/WEB-INF/views/content/admin/menu/stat/adminStat.jsp" />
+		<put-attribute name="title" value="관리자 통계페이지"/>		
+	</definition>
+	
+	<!-- 회원관리 화면 -->
+	<definition name="adminMember" extends="admin.basic.layout">
+		<put-attribute name="content" value="/WEB-INF/views/content/admin/menu/member/adminMember.jsp" />
+		<put-attribute name="title" value="관리자 회원관리페이지"/>		
+	</definition>
+	
+	<!-- 게시판관리 게시글관리 화면 -->
+	<definition name="adminNotice" extends="admin.basic.layout">
+		<put-attribute name="content" value="/WEB-INF/views/content/admin/menu/board/adminNotice.jsp" />
+		<put-attribute name="title" value="게시글관리 페이지"/>		
+	</definition>
+	
+	<!-- 게시판관리 QNA 화면 -->
+	<definition name="adminQna" extends="admin.basic.layout">
+		<put-attribute name="content" value="/WEB-INF/views/content/admin/menu/board/adminQna.jsp" />
+		<put-attribute name="title" value="QNA관리 페이지"/>		
+	</definition>
+	
+	<!-- 여행지 리뷰 관리 화면 -->
+	<definition name="adminTravel" extends="admin.basic.layout">
+		<put-attribute name="content" value="/WEB-INF/views/content/admin/menu/travel/adminTravel.jsp" />
+		<put-attribute name="title" value="리뷰관리 페이지"/>		
+	</definition>
+	
+	<!-- 여행지 태그 관리 화면 -->
+	<definition name="adminTag" extends="admin.basic.layout">
+		<put-attribute name="content" value="/WEB-INF/views/content/admin/menu/travel/adminTag.jsp" />
+		<put-attribute name="title" value="태그관리 페이지"/>		
+	</definition>
+	
+	<!-- 여행지 카테고리 관리 화면 -->
+	<definition name="adminCategory" extends="admin.basic.layout">
+		<put-attribute name="content" value="/WEB-INF/views/content/admin/menu/travel/adminCategory.jsp" />
+		<put-attribute name="title" value="카테고리관리 페이지"/>		
+	</definition>
+	
+	<!-- 게시판관리 QNA 등록화면 -->
+	<definition name="adminQnaInsert" extends="admin.basic.layout">
+		<put-attribute name="content" value="/WEB-INF/views/content/admin/menu/board/adminQnaInsert.jsp" />
+		<put-attribute name="title" value="QNA관리 페이지"/>		
+	</definition>
+	
+	<definition name="user.basic.layout" template="/WEB-INF/views/layout/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+		<put-attribute name="leftbar" value="/WEB-INF/views/layout/leftbar.jsp" />
+		<put-attribute name="rightbar" value="/WEB-INF/views/layout/rightbar.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	</definition>
+
+	<!-- 마이페이지에서 사용되는 타일즈 -->
+	<definition name="user.basic.myPage" template="/WEB-INF/views/layout/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+		<put-attribute name="leftbar" value="/WEB-INF/views/content/user/mypage/leftbar.jsp" />
+		<put-attribute name="rightbar" value="" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	</definition>
+
+	<!-- 회원가입에서 사용되는 타일즈 -->
+	<definition name="user.basic.join" template="/WEB-INF/views/layout/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+		<put-attribute name="leftbar" value="" />
+		<put-attribute name="rightbar" value="" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	</definition>
+	
+	<!-- 유저 게시판 에서 사용되는 타일즈 -->
+	<definition name="user.basic.board" template="/WEB-INF/views/layout/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+		<put-attribute name="leftbar" value="/WEB-INF/views/content/user/board/common/leftbar.jsp" />
+		<put-attribute name="rightbar" value="" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	</definition>
+	
+		<!--여행 축제 정보 세부보기에서 사용하는 레이아웃 -->
+	<definition name="user.basicInfo" template="/WEB-INF/views/layout/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+		<put-attribute name="leftbar" value="/WEB-INF/views/layout/innerLeft.jsp" />
+		<put-attribute name="rightbar" value="/WEB-INF/views/layout/rightbar.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	</definition>
+	
+	<!-- 
+		유저 
+	-->
+	
+	<!-- index 화면 -->
+	<definition name="index" extends="user.basic.layout">
+		<put-attribute name="title" value="메인화면"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/main/index.jsp" />
+	</definition>
+	
+	<!-- 여행지 세부보기 -->
+	<definition name="mainSelect" extends="user.basicInfo">
+		<put-attribute name="title" value="메인화면"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/main/mainSelect.jsp" />
+	</definition>
+	
+	<!-- 여행지 검색 화면(지역기반, 축제, 키워드 검색) -->
+	<definition name="searchBasic" extends="user.basic.layout">
+		<put-attribute name="title" value="여행지 검색"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/travel/listInfo/searchBasic.jsp" />
+	</definition>
+	
+	<!-- 태그 검색 화면 -->
+	<definition name="searchTag" extends="user.basic.layout">
+		<put-attribute name="title" value="태그 검색"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/tag/searchTag.jsp" />
+	</definition>
+	
+	<!-- 마이 페이지 화면 -->
+	<definition name="myPage" extends="user.basic.myPage">
+		<put-attribute name="title" value="마이 페이지"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/myPageMain.jsp" />
+	</definition>
+		
+		
+	<!-- 마이 페이지 수정 화면 -->
+	<definition name="myPageUpdate" extends="user.basic.myPage">
+		<put-attribute name="title" value="나의정보 수정"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/updateMyPage.jsp" />
+	</definition>
+	
+		<!-- 마이 페이지_캘린더 화면-->
+	<definition name="Calendar" extends="user.basic.myPage">
+		<put-attribute name="title" value="마이캘린더"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/myCalendar.jsp" />
+	</definition>
+	
+	<!-- 캘린더 상세보기 화면-->
+	<definition name="ScheduleDetailPage" extends="user.basic.myPage">
+		<put-attribute name="title" value="캘린더 상세보기"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/scheduleDetailPage.jsp" />
+	</definition>
+	
+	<!-- 캘린더 상세보기 내부 일정 readOnly-->
+	<definition name="ScheduleDetailReadOnlyPage" extends="user.basic.join">
+		<put-attribute name="title" value="캘린더 상세보기"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/schedule/detail/scheduleDetailReadOnlyPage.jsp" />
+	</definition>
+	
+	<!-- 캘린더 상세보기 화면 readOnly-->
+	<definition name="ScheduleDetailReadPage" extends="user.basic.join">
+		<put-attribute name="title" value="캘린더 상세보기"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/schedule/detail/selectDetailReadOnly.jsp" />
+	</definition>
+
+	<!-- 캘린더 작성 화면-->
+	<definition name="insertSche" extends="user.basic.myPage">
+		<put-attribute name="title" value="캘린더 작성하기"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/schedule/detail/insertSche.jsp" />
+	</definition>
+	
+	<!-- 회원가입 화면-->
+	<definition name="joinForm" extends="user.basic.join">
+		<put-attribute name="title" value="회원가입폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/join/joinForm.jsp" />
+	</definition>
+	
+	<!-- 아이디 찾기 -->
+	<definition name="findIdForm" extends="user.basic.join">
+		<put-attribute name="title" value="아이디 찾기"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/join/findIdForm.jsp" />
+	</definition>
+	
+	<!-- 찾은 아이디 리스트 -->
+	<definition name="findIdList" extends="user.basic.join">
+		<put-attribute name="title" value="찾은 아이디 리스트"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/join/findIdList.jsp" />
+	</definition>
+	
+	<!-- 비밀번호 찾기 -->
+	<definition name="findPasswordForm" extends="user.basic.join">
+		<put-attribute name="title" value="비밀번호 찾기"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/join/findPasswordForm.jsp" />
+	</definition>
+	
+	<!-- 비밀번호 변경하기 -->
+	<definition name="resetPasswordForm" extends="user.basic.join">
+		<put-attribute name="title" value="비밀번호 변경"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/join/resetPasswordForm.jsp" />
+	</definition>
+	
+	<!-- 회사 개요 화면 -->
+	<definition name="compSummary" extends="user.basic.join">
+		<put-attribute name="title" value="회사 개요"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/about/compSummay.jsp" />
+	</definition>
+		
+	<!-- 친구 목록 화면 -->
+	<definition name="friendList" extends="user.basic.layout">
+		<put-attribute name="title" value="친구 목록"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/friendList.jsp" />
+	</definition>
+	
+	<!-- 여행지 상세 화면 -->
+	<definition name="basicInfo" extends="user.basicInfo">
+		<put-attribute name="title" value="여행지 상세"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/travel/detailInfo/basicInfo.jsp" />
+	</definition>
+	
+	<!-- 메인화면 여행지 추천 -->
+	<definition name="areaListMore" extends="user.basic.layout">
+		<put-attribute name="title" value="메인화면 여행지 추천"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/main/areaListMore.jsp" />
+	</definition>
+	
+	<!-- 
+		 유저 
+	-->
+	
+	<!-- 
+		 게시판  
+	-->
+	
+	<!-- 게시글 검색 화면 -->
+	<definition name="searchBoard" extends="user.basic.board">
+		<put-attribute name="title" value="게시글 검색 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/common/boardSearch.jsp" />
+	</definition>
+	
+	
+	<!-- 댓글 작성 화면 -->
+	<definition name="insertReply" extends="user.basic.board">
+		<put-attribute name="title" value="댓글 작성 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/common/insertReply.jsp" />
+	</definition>
+	
+	<!-- 여행 후기 메인 화면 -->
+	<definition name="travelMain" extends="user.basic.board">
+		<put-attribute name="title" value="여행후기 메인 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/notice/travelBoard.jsp" />
+	</definition>
+	
+	<!-- 여행 후기 상세 화면 -->
+	<definition name="travelDetail" extends="user.basic.board">
+		<put-attribute name="title" value="여행후기 상세 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/notice/travelDetail.jsp" />
+	</definition>
+	
+	<!-- 여행 후기 작성 화면 -->
+	<definition name="travelInsert" extends="user.basic.board">
+		<put-attribute name="title" value="여행후기 작성 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/notice/travelInsert.jsp" />
+	</definition>
+	
+	<!-- 여행 후기 수정 화면 -->
+	<definition name="travelUpdate" extends="user.basic.board">
+		<put-attribute name="title" value="여행후기 수정 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/notice/travelUpdate.jsp" />
+	</definition>
+	
+	<!-- Q&A 메인 화면 -->
+	<definition name="qnaMain" extends="user.basic.board">
+		<put-attribute name="title" value="qna 메인 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/qna/qnaBoard.jsp" />
+	</definition>
+	
+	<!-- Q&A 상세 화면 -->
+	<definition name="qnaDetail" extends="user.basic.board">
+		<put-attribute name="title" value="qna 상세 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/qna/qnaDetail.jsp" />
+	</definition>
+	
+	<!-- Q&A 수정 화면 -->
+	<definition name="qnaUpdate" extends="user.basic.board">
+		<put-attribute name="title" value="qna 수정 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/qna/qnaUpdate.jsp" />
+	</definition>
+	
+	<!-- Q&A 작성 화면 -->
+	<definition name="qnaInsert" extends="user.basic.board">
+		<put-attribute name="title" value="qna 작성 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/qna/qnaInsert.jsp" />
+	</definition>
+	
+	<!-- Q&A 작성 화면 -->
+	<definition name="qnaInsert" extends="user.basic.board">
+		<put-attribute name="title" value="qna 작성 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/qna/qnaInsert.jsp" />
+	</definition>
+	
+	
+	<!-- Q&A 검색 화면 -->
+	<definition name="qnaSearch" extends="user.basic.board">
+		<put-attribute name="title" value="qna 작성 폼"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/qna/qnaDetail.jsp" />
+	</definition>
+	
+		<!-- 일정 조회 게시판 화면 -->
+	<definition name="selectScheBoardList" extends="user.basic.layout">
+		<put-attribute name="title" value="일정 게시판"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/sche/selectScheBoardList.jsp" />
+	</definition>
+	
+		<!-- 일정 조회 게시판 화면 -->
+	<definition name="searchScheBoard" extends="user.basic.layout">
+		<put-attribute name="title" value="일정 게시판"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/board/sche/selectScheBoardList.jsp" />
+	</definition>
+	
+
+	
+	<!-- 
+		 게시판 
+	-->
+	
+	
+	<!--	
+		chatRoom 	
+	-->
+	<!-- 채팅방 목록 -->
+	<definition name="chattingRoomList" extends="user.basic.layout">
+		<put-attribute name="title" value="채팅방 목록"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/chattingroom/chatting/chattingRoomList.jsp" />
+	</definition>
+	
+	
+	<!-- 채팅방 layout -->
+	<definition name="user.chattingroom.layout" template="/WEB-INF/views/layout/layout_chat.jsp">
+		<put-attribute name="title" value="채팅방" />
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp"/>
+		<put-attribute name="chattingroom" value="/WEB-INF/views/content/user/chattingroom/chatting/chattingMain.jsp"/>
+		<put-attribute name="chatMenubar" value="/WEB-INF/views/content/user/chattingroom/chatMenubar/chatMenubar.jsp"/>
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp"/>
+	</definition>
+	
+	<!-- 채팅방 기본 -->
+	<definition name="chatMain" extends="user.chattingroom.layout">
+		<put-attribute name="title" value="채팅방"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/chattingroom/chatSchedule/chatScheduleMain.jsp" />
+	</definition>
+	
+	<!-- end chatRoom 	-->
+	
+	
+	<!-- 마이 페이지 수정 화면 -->
+	<definition name="checkPass" extends="user.basic.myPage">
+		<put-attribute name="title" value="나의정보 수정"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/checkPass.jsp" />
+	</definition>
+	
+	
+	<!-- 회원탈퇴 안내 페이지 이동 -->
+	<definition name="dropMem" extends="user.basic.myPage">
+		<put-attribute name="title" value="회원 탈퇴"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/drop/myPageDrop.jsp" />
+	</definition>
+	
+	<!--회원탈퇴 비밀번호 확인 화면 -->
+	<definition name="dropMemCheckPass" extends="user.basic.myPage">
+		<put-attribute name="title" value="회원 탈퇴 확인"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/drop/checkPass.jsp" />
+	</definition>
+	
+	<!--회원탈퇴 완료 후 인사화면 -->
+	<definition name="dropMemReg" extends="user.basic.myPage">
+		<put-attribute name="title" value="회원탈퇴"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/drop/dropMemReg.jsp" />
+	</definition>
+	
+	<!--최근 조회한 게시글 -->
+	<definition name="selectRecentBoard" extends="user.basic.myPage">
+		<put-attribute name="title" value="최근 글 보기"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/recent/selectRecentBoard.jsp" />
+	</definition>
+
+	<!--최근 조회한 여행지 -->
+	<definition name="selectRecentTrevel" extends="user.basic.myPage">
+		<put-attribute name="title" value="최근 글 보기"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/recent/selectRecentTrevel.jsp" />
+	</definition>
+	
+	<!--여행지 즐겨찾기-->
+	<definition name="selectBookmarkArea" extends="user.basic.myPage">
+		<put-attribute name="title" value="여행지 즐겨찾기"/>
+		<put-attribute name="content" value="/WEB-INF/views/content/user/mypage/recent/selectBookmarkArea.jsp" />
+	</definition>	
+	
+	<!-- 관리자 -->
+	
+</tiles-definitions>
+

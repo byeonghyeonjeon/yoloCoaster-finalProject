@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="book">
+	<!-- book insert -->
+	<insert id="bookInsert" parameterType="BookVO">
+	INSERT INTO book(book_seq,
+					chat_seq,
+					book_dt,
+					book_time,
+					book_cate,
+					book_money,
+					book_detail,
+					book_method,
+					book_memo,
+					book_mem_id,
+					book_inout)
+	VALUES (book_seq.NEXTVAL,
+			#{chat_seq},
+			TO_DATE(#{book_dt},'yyyy.mm.dd'),
+			TO_DATE(#{book_time},'hh24:mi'),
+			#{book_cate},
+			#{book_money},
+			#{book_detail},
+			#{book_method},
+			#{book_memo},
+			#{book_mem_id},
+			#{book_inout}
+			)		
+	</insert>
+	
+	<!-- book Main List 조회 -->
+	<select id="getBookMain" parameterType="int" resultType="BookVO">
+	SELECT book_seq, chat_seq, to_char(book_dt, 'yyyy.mm.dd') AS book_dt,
+		   to_char(book_time, 'hh24:mi') AS book_time, book_cate,
+		   book_money, book_detail, book_method,
+		   book_memo, book_mem_id, book_inout
+	FROM book
+	WHERE chat_seq = #{chat_seq}
+	ORDER BY 3 DESC, 4 DESC	
+	</select>
+	
+	<!-- book Detail 조회 -->
+	<select id="getBookDetail" parameterType="int" resultType="BookVO">
+	SELECT *
+	FROM book
+	WHERE book_seq = #{book_seq}	
+	</select>
+	
+	<!-- book delete 요청 -->
+	<delete id="bookDelete" parameterType="int">
+	DELETE FROM book
+	WHERE book_seq = #{book_seq}	
+	</delete>
+	
+	<!-- book update 요청  -->
+	<update id="bookUpdate" parameterType="BookVO">
+	UPDATE book
+	SET book_cate= #{book_cate},
+	    book_detail= #{book_detail},
+	    book_money = #{book_money},
+	    book_method= #{book_method},
+		book_memo= #{book_memo},
+		book_dt= TO_DATE( #{book_dt},'yyyy.mm.dd'),
+		book_time= TO_DATE( #{book_time},'hh24:mi'),
+	    book_inout= #{book_inout}
+	WHERE book_seq =  #{book_seq}
+	</update>
+	
+	<!-- bookSearch 요청 -->
+	<select id="bookSearch" parameterType="BookSearchVO" resultType="BookVO">
+	SELECT book_seq, chat_seq, to_char(book_dt, 'yyyy.mm.dd') AS book_dt,
+		   to_char(book_time, 'hh24:mi') AS book_time, book_cate,
+		   book_money, book_detail, book_method,
+		   book_memo, book_mem_id, book_inout
+	FROM book
+	WHERE chat_seq = #{chat_seq}
+		<if test="selectMonth!='ALL'">
+			AND  TO_CHAR(BOOK_DT,'MM') = #{selectMonth}
+		</if>
+		<if test="selectInOut!='ALL'">
+			AND  book_inout = #{selectInOut}
+		</if>
+		<choose>
+			<when test="selectContent.equals('ALL')">
+			AND (
+				book_cate like '%' || #{searchText} || '%'
+				OR
+				book_detail like '%' || #{searchText} || '%'
+				)
+			</when>
+			
+			<when test="selectContent.equals('CATEGORY')">
+			AND book_cate like '%' || #{searchText} || '%'
+			</when>
+			
+			<when test="selectContent.equals('DETAIL')">
+			AND book_detail like '%' || #{searchText} || '%'
+			</when>
+			
+		</choose>
+		
+	</select>
+
+		
+		
+</mapper>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <style>
+    nav.navbar {
+      background: linear-gradient(to right, #a1f276, #5ce09b);
+    }
+
+    .tobNavbarName {
+      color: black;
+    }
+
+    .nav>li>a:focus,
+    .nav>li>a:hover {
+      background-color: #eee;
+    }
+
+    .navbar-header .navbar-toggle {
+      background-color: #1BA39C;
+    }
+
+    .navbar-header .icon-bar {
+      background-color: #5ce09b;
+    }
+
+    .navbar-brand img {
+      width: 10%;
+    }
+
+    #searchForm {
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      #body {
+        padding-top: 160px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      #body,
+      #leftbar,
+      #rightbar {
+        padding-top: 110px;
+      }
+    }
+
+    #footer img {
+      width: 60px;
+    }
+
+    #footer table {
+      display: inline-block;
+    }
+
+    #footer td {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+
+    /* modal */
+
+    #formLogin {
+      text-align: center;
+    }
+
+    #btnLogin {
+      height: 68px;
+    }
+
+    #naverIdLogin a img {
+      width: 100%;
+    }
+  </style>
+
+  <!-- 기본 템플릿 css 수정 ㄴㄴ -->
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */
+
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+
+    .row.content {
+      height: 450px
+    }
+
+    /* Set gray background color and 100% height */
+
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* Set black background color, white text and some padding */
+
+    footer {
+      background-color: #ffffff;
+      color: white;
+      padding: 15px;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {
+        height: auto;
+      }
+    }
+  </style>
+
+
+
+  <!-- naver login -->
+  <!-- LoginWithNaverId Javscript SDK -->
+  <script src="js/naveridlogin_js_sdk_2.0.0.js"></script>
+  <!-- (3) LoginWithNaverId Javscript 설정 정보 및 초기화 -->
+  <script>
+    $(function() {
+      var naverLogin = new naver.LoginWithNaverId({
+        clientId: "tBELWPh_hKy9AINnRWHn",
+        callbackHandle: true,
+
+        //login버튼클릭시 -> callbackUrl로 이동 -> callbackUrl에서 로그인한 유저의 정보를 받음 -> 회원가입창으로 이동하게끔
+        callbackUrl: "http://" + window.location.hostname + ((location.port == "" || location.port == undefined) ? "" : ":" + location.port) + "/naverLoginCallBack.jsp",
+        isPopup: false, //팝업로그인 여부
+
+        //로그인 버튼 사이즈 및 색깔 지정
+        loginButton: {
+          color: "green",
+          type: 3,
+          height: 40
+        }
+      });
+      /* (4) 네아로 로그인 정보를 초기화하기 위하여 init을 호출 */
+      naverLogin.init();
+
+      /* (4-1) 임의의 링크를 설정해줄 필요가 있는 경우 */
+      $("#gnbLogin").attr("href", naverLogin.generateAuthorizeUrl());
+    })
+  </script>
+
+
+
+  <!-- facebook login -->
+  <script>
+    // This is called with the results from from FB.getLoginStatus().
+    function statusChangeCallback(response) {
+      console.log('statusChangeCallback');
+      console.log(response);
+      // The response object is returned with a status field that lets the
+      // app know the current login status of the person.
+      // Full docs on the response object can be found in the documentation
+      // for FB.getLoginStatus().
+      if (response.status === 'connected') {
+        // Logged into your app and Facebook.
+        testAPI();
+      }
+    }
+
+    // This function is called when someone finishes with the Login
+    // Button.  See the onlogin handler attached to it in the sample
+    // code below.
+    function checkLoginState() {
+      console.log('function checkLoginState()');
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    }
+
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId: '2090151664564694',
+        cookie: true, // enable cookies to allow the server to access
+        // the session
+        xfbml: true, // parse social plugins on this page
+        version: 'v3.0' // use graph api version 2.8
+      });
+
+      //로그인 상태를 확인함
+      // FB.getLoginStatus(function(response) {
+      //   console.log('FB.getLoginStatus')
+      //   statusChangeCallback(response);
+      // });
+
+
+
+    };
+
+    // Load the SDK asynchronously
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id))
+        return;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/ko_KR/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+
+
+    //페이스북으로 로그인한 유저의 정보가 담긴 객체
+    var userData;
+
+    //로그인 완료시 실행되는 함수 (회원가입창으로 이동 필요)
+    function testAPI() {
+      FB.api('/me', 'GET', {
+        "fields": "id,name,email,location,gender,age_range"
+      }, function(response) {
+        console.log('Successful login for: ' + response.name);
+        console.log('response.name: ' + response.name);
+        console.log('response.id: ' + response.id);
+        console.log('response.email: ' + response.email);
+        console.log('response.location: ' + response.location);
+        console.log('response.gender: ' + response.gender);
+        console.log('response.age_range.min: ' + response.age_range.min);
+
+        userData = response;
+      });
+
+    }
+  </script>
+
+
+
+
+
+</head>
+
+<body>
+
+
+  <!-- data-target의 아이디와 일치하는 모달창을 띄움 -->
+  <!-- 모달 버튼 -->
+  <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  모달 버튼
+</button>
+  <!-- 모달 a태그 -->
+  <a href="#" data-toggle="modal" data-target="#myModal">모달 a태그</a>
+
+
+
+
+  <!-- Modal창 -->
+  <div class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- modal header(title) -->
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">로그인</h4>
+        </div>
+
+        <!-- modal body (content) -->
+        <div class="modal-body">
+          <div class="container-fluid">
+            <form action="" id="formLogin">
+
+
+
+                <div class="row col-xs-10">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <input type="text" class="form-control" placeholder="아이디를 입력하세요" id="inputID" name="id">
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" id="inputPW" name="pw">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xs-2">
+                  <button class="btn btn-success btn-lg" type="submit" id="btnLogin">로그인</button>
+                </div>
+
+
+
+            </form>
+          </div>
+
+
+          <div class="container-fluid">
+
+            <div class="row">
+
+              <div class="col-xs-12 col-sm-6">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox">아이디기억하기
+                  </label>
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-6">
+                <div class="checkbox">
+
+                  <a href="#">아이디</a>/<a href="#">비밀번호</a>&nbsp;찾기
+
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+
+              <!-- naver login button -->
+              <div class="col-xs-6">
+                <div id="naverIdLogin">
+                  <a id="naverIdLogin_loginButton" href="#" role="button"></a>
+                </div>
+              </div>
+
+
+              <!-- facebook login button -->
+              <div class="col-xs-6">
+                <!-- scope에 원하는 정보를 입력하면 된다 -->
+                <fb:login-button scope="public_profile,email,user_location,user_gender,user_age_range" onlogin="checkLoginState();" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false">
+                </fb:login-button>
+              </div>
+
+            </div>
+
+
+
+
+            <br>
+            <div class="row">
+              <div class="col-md-12">
+                <button type="button" class="btn btn-info btn-block">회원가입</button>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+</body>
+
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- 이거 넣으면 오류 나니까 각자 알아서 넣도록 css폴더나 js폴더 참고 -->
+<!--   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+<!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+<!--   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+
+  <style>
+    nav.navbar {
+      background: linear-gradient(to right, #a1f276, #5ce09b);
+    }
+
+    .tobNavbarName {
+      color: black;
+    }
+
+    .nav>li>a:focus,
+    .nav>li>a:hover {
+      background-color: #eee;
+    }
+
+    .navbar-header .navbar-toggle {
+      background-color: #1BA39C;
+    }
+
+    .navbar-header .icon-bar {
+      background-color: #5ce09b;
+    }
+
+    .navbar-brand img {
+      width: 10%;
+    }
+
+    #searchForm {
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      #body {
+        padding-top: 160px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      #body,
+      #leftbar,
+      #rightbar {
+        padding-top: 110px;
+      }
+    }
+
+    #footer img {
+      width: 60px;
+    }
+
+    #footer table {
+      display: inline-block;
+    }
+
+    #footer td {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  </style>
+
+  <!-- 기본 템플릿 css 수정 ㄴㄴ -->
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */
+
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+
+    .row.content {
+      height: 450px
+    }
+
+    /* Set gray background color and 100% height */
+
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* Set black background color, white text and some padding */
+
+    footer {
+      background-color: #ffffff;
+      color: white;
+      padding: 15px;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {
+        height: auto;
+      }
+    }
+  </style>
+
+
+
+  <!-- 날짜 받기용 script 및 css -->
+  <script src="bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+  <script src="bootstrap-datepicker/locales/bootstrap-datepicker.kr.min.js"></script>
+  <link rel="stylesheet" href="bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" href="bootstrap-datepicker/css/bootstrap-datepicker3.standalone.min.css">
+
+  <script type="text/javascript">
+    $(function() {
+      $('.datepicker').datepicker({
+        autoclose: true,
+        format: "yyyy-mm-dd",
+        maxViewMode: 1,
+        todayBtn: "linked",
+        language: "kr",
+        orientation: "bottom auto",
+        todayHighlight: true
+      });
+
+    })
+  </script>
+</head>
+
+<body>
+
+  <!-- Modal창 -->
+  <div class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- modal header(title) -->
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">일정 관리</h4>
+        </div>
+
+        <!-- modal body (content) -->
+        <div class="modal-body">
+          <div class="container-fluid">
+            <form action="" id="formLogin" class="form-horizontal" autocomplete="off">
+
+              <div class="form-group">
+                <label for="inputTitle" class="col-sm-2 control-label">제목</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="inputTitle" placeholder="일정 제목을 입력하세요">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputDateStart" class="col-sm-2 control-label">시작일</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control datepicker" id="inputDateStart" placeholder="시작일을 입력하세요">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputDateEnd" class="col-sm-2 control-label">종료일</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control datepicker" id="inputDateEnd" placeholder="종료일을 입력하세요">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputColor" class="col-sm-2 control-label">라벨</label>
+                <div class="col-sm-10">
+                  <input type="color" class="form-control" id="inputColor">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputDateEnd" class="col-sm-2 control-label">공개설정</label>
+                <div class="col-sm-10">
+                  <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                      <input type="radio" name="options" value="Y" id="option1" autocomplete="off" checked>공개
+                    </label>
+                    <label class="btn btn-primary">
+                      <input type="radio" name="options" value="N" id="option2" autocomplete="off">비공개
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-success">일정 만들기</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                  <button type="button" class="btn btn-danger">삭제</button>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+</body>
+
+</html>

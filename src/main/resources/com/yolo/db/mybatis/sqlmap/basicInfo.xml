@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="travel">
+
+	<!-- 여행지 기본 정보 -->
+	<insert id="insertBasicInfo" parameterType="BasicinfoVO">
+		INSERT INTO BASICINFO
+			(
+				CONTENTID, CONTENTTYPEID, TITLE, AREACODE, 
+				SIGUNGUCODE, TEL, CAT1, CAT2, CAT3,
+				ADDR1, ADDR2, FIRSTIMAGE, FIRSTIMAGE2, 
+				MAPX, MAPY, MLEVEL, DIST, EVENTSTARTDATE, 
+				EVENTENDDATE, ZIPCODE, HOMEPAGE, OVERVIEW
+			)
+		VALUES 
+			(
+				#{contentid}, #{contenttypeid}, #{title}, #{areacode},
+				#{sigungucode}, #{tel}, #{cat1}, #{cat2}, #{cat3},
+				#{addr1}, #{addr2}, #{firstimage}, #{firstimage2},
+				#{mapx}, #{mapy}, #{mlevel}, #{dist}, #{eventstartdate},
+				#{eventenddate}, #{zipcode}, #{homepage}, #{overview}
+			)
+	</insert>
+	
+	<!-- 여행지 상세 정보 조회 -->
+	<select id="getBasicInfo" parameterType="String" resultType="BasicinfoVO">
+		SELECT E.*
+		FROM
+		(
+		    SELECT D.*
+		    FROM
+		    (
+		        SELECT BASICINFO.*, goodCount, reviewCount
+		        FROM BASICINFO,
+		        (
+		            SELECT NVL(GOODCOUNT, 0) AS goodCount, NVL(REVIEWCOUNT, 0) AS reviewCount, COALESCE(A.CONTENTID, B.CONTENTID) AS CONTENTID
+		            FROM
+		            (
+		                SELECT CONTENTID, COUNT(*) AS GOODCOUNT
+		                FROM GOOD
+		                WHERE CONTENTID = #{contentid}
+		                GROUP BY CONTENTID
+		            ) A FULL OUTER JOIN
+		            (
+		                SELECT CONTENTID, COUNT(*) AS REVIEWCOUNT
+		                FROM REVIEW
+		                WHERE CONTENTID = #{contentid}
+		                GROUP BY CONTENTID
+		            ) B
+		            ON (A.CONTENTID = B.CONTENTID)
+		        ) C
+		        WHERE BASICINFO.CONTENTID = C.CONTENTID
+		        
+		        UNION ALL
+		        
+		        SELECT BASICINFO.*, 0, 0
+		        FROM BASICINFO, DUAL
+		        WHERE CONTENTID = #{contentid}
+		    ) D
+		    ORDER BY GOODCOUNT DESC, REVIEWCOUNT DESC
+		) E
+		WHERE ROWNUM = 1
+	</select>
+
+	<!-- 관광지 소개 정보 -->
+	<insert id="insertDetailByTour" parameterType="DetailinfotourVO">
+		INSERT INTO DETAILINFOTOUR
+			(
+				CONTENTID, ACCOMCOUNT, CHKBABYCARRIAGE, CHKCREDITCARD, 
+				CHKPET, EXPAGERANGE, EXPGUIDE, HERITAGE1, HERITAGE2, 
+				HERITAGE3, INFOCENTER, OPENDATE, PARKING, RESTDATE, 
+				USESEASON, USETIME
+			)
+		VALUES 
+			(
+				#{contentid}, #{accomcount}, #{chkbabycarriage}, #{chkcreditcard}, 
+				#{chkpet}, #{expagerange}, #{expguide}, #{heritage1}, #{heritage2}, 
+				#{heritage3}, #{infocenter}, #{opendate}, #{parking}, #{restdate}, 
+				#{useseason}, #{usetime}
+			) 
+	</insert>
+	
+	<!-- 관광지 소개 정보 조회 -->
+	<select id="getDetailByTour" parameterType="String" resultType="DetailinfotourVO">
+		SELECT * 
+		FROM DETAILINFOTOUR 
+		WHERE CONTENTID = #{contentid}
+	</select>
+	
+	<!-- 문화시설 소개 정보 -->
+	<insert id="insertCulture" parameterType="DetailinfocultureVO">
+		INSERT INTO DETAILINFOCULTURE
+			( 
+				CONTENTID, ACCOMCOUNTCULTURE, CHKBABYCARRIAGECULTURE, CHKCREDITCARDCULTURE,
+				CHKPETCULTURE, DISCOUNTINFO, INFOCENTERCULTURE, PARKINGCULTURE, PARKINGFEE,
+				RESTDATECULTURE, USEFEE, USETIMECULTURE, SCALE, SPENDTIME
+			)
+		VALUES 
+			(
+				#{contentid}, #{accomcountculture}, #{chkbabycarriageculture}, #{chkcreditcardculture},
+				#{chkpetculture}, #{discountinfo}, #{infocenterculture}, #{parkingculture}, #{parkingfee},
+				#{restdateculture}, #{usefee}, #{usetimeculture}, #{scale}, #{spendtime}
+			)
+	</insert>
+	
+	<!-- 문화시설 소개 정보 조회 -->
+	<select id="getCulture" parameterType="String" resultType="DetailinfocultureVO">
+		SELECT * 
+		FROM DETAILINFOCULTURE 
+		WHERE CONTENTID = #{contentid}
+	</select>
+	
+	<!-- 레포츠 소개 정보 -->
+	<insert id="insertLeports" parameterType="Detailinfo_leportsVO">
+		INSERT INTO DETAILINFO_LEPORTS
+			( 
+				CONTENTID, ACCOMCOUNTLEPORTS, CHKBABYCARRIAGELEPORTS, CHKCREDITCARDLEPORTS,
+				CHKPETLEPORTS, EXPAGERANGELEPORTS, INFOCENTERLEPORTS, OPENPERIOD,
+				PARKINGFEELEPORTS, PARKINGLEPORTS, RESERVATION, RESTDATELEPORTS,
+				SCALELEPORTS, USEFEELEPORTS, USETIMELEPORTS
+			)
+		VALUES 
+			(
+				#{contentid}, #{accomcountleports}, #{chkbabycarriageleports}, #{chkcreditcardleports},
+				#{chkpetleports}, #{expagerangeleports}, #{infocenterleports}, #{openperiod},
+				#{parkingfeeleports}, #{parkingleports}, #{reservation}, #{restdateleports},
+				#{scaleleports}, #{usefeeleports}, #{usetimeleports}
+			)
+	</insert>
+	
+	<!-- 레포츠 소개 정보 조회 -->
+	<select id="getLeports" parameterType="String" resultType="Detailinfo_leportsVO">
+		SELECT * 
+		FROM DETAILINFO_LEPORTS
+		WHERE CONTENTID = #{contentid}
+	</select>
+	
+	<!-- 여행코스 소개 정보 -->
+	<insert id="insertCourse" parameterType="Detailinfo_courseVO">
+		INSERT INTO DETAILINFO_COURSE
+			( 
+				CONTENTID, DISTANCE, INFOCENTERTOURCOURSE, SCHEDULE, 
+				TAKETIME, THEME
+			)
+		VALUES 
+			(
+				#{contentid}, #{distance}, #{infocentertourcourse}, #{schedule}, 
+				#{taketime}, #{theme}
+			)
+	</insert>
+	
+	<!-- 여행코스 정보 조회 -->
+	<select id="getCourse" parameterType="String" resultType="Detailinfo_courseVO">
+		SELECT * 
+		FROM DETAILINFO_COURSE 
+		WHERE CONTENTID = #{contentid}
+	</select>
+	
+	<!-- 축제 소개 정보 -->
+	<insert id="insertEvent" parameterType="Detailinfo_eventVO">
+		INSERT INTO DETAILINFO_EVENT
+			( 
+				CONTENTID, AGELIMIT, BOOKINGPLACE, DISCOUNTINFOFESTIVAL,
+				EVENTSTARTDATE, EVENTENDDATE, EVENTHOMEPAGE, EVENTPLACE,
+				FESTIVALGRADE, PLACEINFO, PLAYTIME, PROGRAM, SPENDTIMEFESTIVAL,
+				SPONSOR1, SPONSOR1TEL, SPONSOR2, SPONSOR2TEL,
+				SUBEVENT, USETIMEFESTIVAL 
+			)
+		VALUES 
+			(
+				#{contentid}, #{agelimit}, #{bookingplace}, #{discountinfofestival},
+				#{eventstartdate}, #{eventenddate}, #{eventhomepage}, #{eventplace},
+				#{festivalgrade}, #{placeinfo}, #{playtime}, #{program}, #{spendtimefestival},
+				#{sponsor1}, #{sponsor1tel}, #{sponsor2}, #{sponsor2tel},
+				#{subevent}, #{usetimefestival}
+			)
+	</insert>
+	
+	<!-- 축제 정보 조회 -->
+	<select id="getEvent" parameterType="String" resultType="Detailinfo_eventVO">
+		SELECT * 
+		FROM DETAILINFO_EVENT
+		WHERE CONTENTID = #{contentid}
+	</select>
+	
+	<!-- 여행코스 추가정보 조회 -->
+	<select id="courseOfAddDetail" parameterType="String" resultType="RepeatInfo_courseVO">
+		SELECT * 
+		FROM REPEATINFO_COURSE
+		WHERE CONTENTID = #{contentid}
+		ORDER BY subnum
+	</select>
+	
+	<!-- 여행코스 추가정보 추가 -->
+	<insert id="insertAddCourse" parameterType="RepeatInfo_courseVO">
+		INSERT INTO REPEATINFO_COURSE
+			(
+				CONTENTID, CONTENTTYPEID, SUBCONTENTID, SUBDETAILALT, SUBDETAILIMG,
+				SUBDETAILOVERVIEW, SUBNAME, SUBNUM
+			)
+		VALUES 
+			(
+				#{contentid}, #{contenttypeid}, #{subcontentid}, #{subdetailalt}, #{subdetailimg},
+				#{subdetailoverview}, #{subname}, #{subnum}
+			)
+	</insert>
+	
+	<!-- 여행코스 아닌경우 추가 정보 조회 -->
+	<select id="etcOfAddDetail" parameterType="String"  resultType="RepeatInfo_ectVO">
+		SELECT * 
+		FROM REPEATINFO_ETC
+		WHERE CONTENTID = #{contentid}
+		ORDER BY serialnum
+	</select>
+	
+	<!-- 여행코스 아닌 경우 추가정보 저장 -->
+	<insert id="insertAddEtc" parameterType="RepeatInfo_ectVO">
+		INSERT INTO REPEATINFO_ETC
+			( 
+				CONTENTID, CONTENTTYPEID, FLDGUBUN, 
+				INFONAME, INFOTEXT, SERIALNUM
+			)
+		VALUES 
+			(
+				#{contentid}, #{contenttypeid}, #{fldgubun}, 
+				#{infoname}, #{infotext}, #{serialnum}
+			)
+	</insert>
+	
+	<!-- 댓글 및 좋아요 수를 가진 여행지 리스트 조회 -->
+	<select id="getGoodAndReviewCount" parameterType="java.util.List" resultType="TravelVO">
+		SELECT BASICINFO.CONTENTID, goodCount, reviewCount
+		FROM BASICINFO,
+		(
+		    SELECT NVL(GOODCOUNT, 0) AS goodCount, NVL(REVIEWCOUNT, 0) AS reviewCount, COALESCE(A.CONTENTID, B.CONTENTID) AS CONTENTID
+		    FROM
+		    (
+		        SELECT CONTENTID, COUNT(*) AS GOODCOUNT
+		        FROM GOOD
+		        WHERE CONTENTID IN (
+		        	<foreach collection="list" item="TravelVO" index="index" separator=", ">
+			    		#{TravelVO.contentid}
+			    	</foreach>
+		        )
+		        GROUP BY CONTENTID
+		    ) A FULL OUTER JOIN
+		    (
+		        SELECT CONTENTID, COUNT(*) AS REVIEWCOUNT
+		        FROM REVIEW
+		        WHERE CONTENTID IN (
+					<foreach collection="list" item="TravelVO" index="index" separator=", ">
+			    		#{TravelVO.contentid}
+			    	</foreach>
+				)
+		        GROUP BY CONTENTID
+		    ) B
+		    ON (A.CONTENTID = B.CONTENTID)
+		) C
+		WHERE BASICINFO.CONTENTID = C.CONTENTID
+	</select>
+	
+	<!-- review 작성 -->
+	<!-- review의 review 저장 -->
+	<insert id="insertReview" parameterType="ReviewVO">
+		<selectKey keyProperty="review_seq" resultType="int" order="BEFORE">
+			SELECT REVIEW_SEQ.NEXTVAL AS review_seq FROM DUAL
+		</selectKey>
+		INSERT INTO REVIEW
+			(
+				REVIEW_SEQ, CONTENTID, REVIEW_TITLE, REVIEW_CONTENT,
+				REVIEW_MEM_ID, REVIEW_DT
+			)
+		VALUES
+			(
+				#{review_seq}, #{contentid}, #{review_title}, #{review_content},
+				#{review_mem_id}, SYSDATE
+			)
+	</insert>
+	
+	<!-- review의 tag 저장 -->
+	<insert id="insertTag" parameterType="java.util.List">
+		INSERT INTO TAG
+			(
+				TAG_SEQ, MAIN_BOARD_SEQ, CONTENTID, TAG_CONTENT
+			)
+		SELECT TAG_SEQ.NEXTVAL, INNER_VIEW.*
+			FROM (	
+			<foreach collection="list" item="TagVO" separator=" UNION ALL ">
+				SELECT #{TagVO.main_board_seq} AS main_board_seq,
+						#{TagVO.contentid} AS contentid,
+		    			#{TagVO.tag_content} AS tag_content
+		    	FROM DUAL
+			</foreach>
+			) INNER_VIEW
+	</insert>
+	
+	<!-- 리뷰의 총 개수 조회 -->
+	<select id="selectReviewAll" parameterType="String" resultType="integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM REVIEW
+		WHERE CONTENTID = #{contentid}
+	</select>
+	
+	<!-- 리뷰 페이징 처리 조회 -->
+	<select id="selectReviewPaging" parameterType="java.util.Map" resultType="ReviewVO">
+		<![CDATA[
+			SELECT B.*, MEMBER.MEM_PROFILE
+			FROM MEMBER,
+			(
+			SELECT X.*
+			FROM 
+				(
+					SELECT ROWNUM rnum, A.* 
+					FROM 
+						(
+							SELECT * FROM REVIEW
+	     		 			WHERE CONTENTID = #{contentid}
+							ORDER BY REVIEW_SEQ DESC
+						) A
+			   		WHERE ROWNUM <= #{pageNo}*2
+			   	) x
+				WHERE X.rnum >= (#{pageNo}-1)*2 + 1
+			) B
+			WHERE MEMBER.MEM_ID = B.REVIEW_MEM_ID
+		]]>
+	</select>
+	
+	<!-- 리뷰의 태그 조회 -->
+	<select id="selectTagOfReview" parameterType="java.util.List" resultType="TagVO">
+		SELECT *
+		FROM TAG
+		WHERE MAIN_BOARD_SEQ IN (
+			<foreach collection="list" item="main_board_seq" separator=", ">
+				#{main_board_seq}
+			</foreach>
+		)
+	</select>
+	
+	<!-- 리뷰의 이미지 조회 -->
+	<select id="selectImgOfReview" parameterType="java.util.List" resultType="File_addVO">
+		SELECT *
+		FROM FILE_ADD
+		WHERE PARENT_SEQ IN  (
+			<foreach collection="list" item="parent_seq" separator=", ">
+				#{parent_seq}
+			</foreach>
+		)
+		AND ADD_SORT = '04'
+	</select>
+	
+	<!-- 사진첩 조회 -->
+	<select id="selectImgAllOfContent" parameterType="String" resultType="File_addVO">
+		<![CDATA[
+			SELECT B.*
+			FROM
+			(
+				SELECT *
+				FROM FILE_ADD,
+				(
+				    SELECT *
+				    FROM REVIEW
+				    WHERE CONTENTID = #{contentid}
+				    ORDER BY REVIEW_SEQ DESC
+				) A
+				WHERE PARENT_SEQ = A.REVIEW_SEQ
+				AND ADD_SORT = '04'
+				ORDER BY ADD_SEQ DESC
+			) B
+			WHERE ROWNUM <= 15
+		]]>
+	</select>
+	
+	<!-- 리뷰 삭제 -->
+	<delete id="deleteReview" parameterType="int">
+		DELETE FROM REVIEW
+		WHERE REVIEW_SEQ = #{review_seq}
+	</delete>
+	
+	<!-- 리뷰 삭제시 태그도 함께 삭제 -->
+	<delete id="deleteTag" parameterType="int">
+		DELETE FROM TAG
+		WHERE MAIN_BOARD_SEQ = #{review_seq}
+	</delete>
+	
+	<!-- 해당 유저의 별점 조회 -->
+	<select id="selectStarByMember" parameterType="Star_scoreVO" resultType="int">
+		SELECT COUNT(*)
+		FROM STAR_SCORE
+		WHERE CONTENTID = #{contentid}
+		AND SCORE_MEM_ID = #{score_mem_id}
+	</select>
+	
+	<!-- 별점 추가 -->
+	<insert id="insertStar" parameterType="Star_scoreVO">
+		INSERT INTO STAR_SCORE
+			(
+				SCORE_SEQ, CONTENTID, SCORE_POINT, SCORE_MEM_ID
+			)
+		VALUES
+			(
+				SCORE_SEQ.NEXTVAL, #{contentid}, #{score_point}, #{score_mem_id}
+			)
+	</insert>
+	
+	<!-- 별점 수정 -->
+	<update id="updateStar" parameterType="Star_scoreVO">
+		UPDATE STAR_SCORE
+		SET SCORE_POINT = #{score_point}
+		WHERE CONTENTID = #{contentid}
+		AND SCORE_MEM_ID = #{score_mem_id}
+	</update>
+	
+	<!-- 모든 별점 조회 -->
+	<select id="selectStar" parameterType="String" resultType="StarVO">
+		SELECT COUNT(*) AS count, SCORE_POINT
+		FROM STAR_SCORE
+		WHERE CONTENTID = #{contentid}
+		GROUP BY SCORE_POINT
+	</select>
+	
+	<!-- tag 통계 조회 -->
+	<select id="selectTagCount" parameterType="String" resultType="TagCountVO">
+		SELECT COUNT(*) AS tag_count, TAG_CONTENT
+		FROM TAG
+		WHERE CONTENTID = #{contentid}
+		GROUP BY TAG_CONTENT
+	</select>
+	
+	
+	<!-- 태그검색 -->
+	<!-- 해당 태그의 여행지 수 조회 -->
+	<select id="selectSearchTagCount" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		(
+		    SELECT CONTENTID
+		    FROM TAG
+		    WHERE TAG_CONTENT = '#' || #{keyword}
+		    AND CONTENTID != '0'
+		    GROUP BY CONTENTID
+		)
+	</select>
+	
+	<!-- 해당 태그의 여행지 조회 -->
+	<select id="selectSearchTagTravelVO" parameterType="java.util.Map" resultType="TravelVO">
+		<![CDATA[
+		SELECT F.*
+		FROM
+		(
+		    SELECT E.*, ROWNUM AS rn
+		    FROM
+		    (
+		        SELECT BASICINFO.*, D.goodCount, D.reviewCount
+		        FROM BASICINFO,
+		        (
+		            SELECT BASICINFO.CONTENTID, goodCount, reviewCount
+		            FROM BASICINFO,
+		            (
+		                SELECT NVL(GOODCOUNT, 0) AS goodCount, NVL(REVIEWCOUNT, 0) AS reviewCount, COALESCE(A.CONTENTID, B.CONTENTID) AS CONTENTID
+		                FROM
+		                (
+		                    SELECT CONTENTID, COUNT(*) AS GOODCOUNT
+		                    FROM GOOD
+		                    WHERE CONTENTID IN (
+		                        SELECT BASICINFO.CONTENTID
+		                        FROM BASICINFO,
+		                        (
+		                            SELECT CONTENTID
+		                            FROM TAG
+		                            WHERE TAG_CONTENT = '#' || #{keyword}
+		                            AND CONTENTID != '0'
+		                            GROUP BY CONTENTID
+		                        ) A
+		                        WHERE BASICINFO.CONTENTID = A.CONTENTID
+		                    )
+		                    GROUP BY CONTENTID
+		                ) A FULL OUTER JOIN
+		                (
+		                    SELECT CONTENTID, COUNT(*) AS REVIEWCOUNT
+		                    FROM REVIEW
+		                    WHERE CONTENTID IN (
+		                        SELECT BASICINFO.CONTENTID
+		                        FROM BASICINFO,
+		                        (
+		                            SELECT CONTENTID
+		                            FROM TAG
+		                            WHERE TAG_CONTENT = '#' || #{keyword}
+		                            AND CONTENTID != '0'
+		                            GROUP BY CONTENTID
+		                        ) A
+		                        WHERE BASICINFO.CONTENTID = A.CONTENTID
+		                    )
+		                    GROUP BY CONTENTID
+		                ) B
+		                ON (A.CONTENTID = B.CONTENTID)
+		            ) C
+		            WHERE BASICINFO.CONTENTID = C.CONTENTID
+		        ) D
+		        WHERE D.CONTENTID = BASICINFO.CONTENTID
+		        ORDER BY D.goodCount DESC, D.reviewCount DESC
+		    ) E
+		    WHERE ROWNUM <= #{pageNo} * 10
+		) F
+		WHERE rn > (#{pageNo}-1) * 10
+		]]>
+	</select>
+	
+	
+	
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chatName">
+	<!-- 새로운 채팅방 생성시 -->
+	<insert id="insertChat_name" parameterType="java.util.List">
+		INSERT INTO CHAT_NAME (CHAT_NAME_SEQ, CHAT_SEQ, NAME, MEM_ID)
+			SELECT CHAT_NAME_SEQ.NEXTVAL, INNER_VIEW.*
+			FROM (
+			    <foreach collection="list" item="Chat_nameVO" index="index" separator=" UNION ALL ">
+			    	SELECT #{Chat_nameVO.chat_seq} AS chat_seq, #{Chat_nameVO.name} AS name, #{Chat_nameVO.mem_id} AS mem_id
+			    	FROM DUAL
+			    </foreach>
+			) INNER_VIEW
+	</insert>
+	
+	
+	<!-- 채팅방 목록 출력(메세지가 없는 경우 포함) -->
+	<select id="selectChattingRoomList" parameterType="String" resultType="ChattingRoomVO">
+		SELECT B.CHAT_SEQ, B.NAME
+	    FROM CHAT,
+	    (
+	        SELECT CHAT_NAME.NAME, A.*
+	        FROM CHAT_NAME, 
+	        (
+	            SELECT CHAT_SEQ, MEM_OUTTM, MEM_ID
+	            FROM CHAT_GROUP
+	            WHERE MEM_ID = #{mem_id}
+	        ) A
+	        WHERE CHAT_NAME.CHAT_SEQ = A.CHAT_SEQ
+	        AND CHAT_NAME.MEM_ID = A.MEM_ID
+	    ) B
+	    WHERE CHAT.CHAT_ST = 'Y'
+	    AND CHAT.CHAT_SEQ = B.CHAT_SEQ
+	</select>
+	
+	<!-- 채팅방 목록 출력(메세지가 있는 경우만) -->
+	<select id="selectChattingRoomListByMessage" parameterType="String" resultType="ChattingRoomVO">
+		<![CDATA[
+		SELECT D.CHAT_SEQ, CHAT_NAME.NAME, D.MESSAGECOUNT
+		FROM CHAT_NAME,
+		(
+		    SELECT COUNT(*) AS MESSAGECOUNT , MESSAGE.CHAT_SEQ
+		    FROM MESSAGE,
+		    (
+		        SELECT B.CHAT_SEQ, B.NAME, B.MEM_OUTTM
+		        FROM CHAT,
+		        (
+		            SELECT CHAT_NAME.NAME, A.*
+		            FROM CHAT_NAME, 
+		            (
+		                SELECT CHAT_SEQ, MEM_OUTTM, MEM_ID
+		                FROM CHAT_GROUP
+		                WHERE MEM_ID = #{mem_id}
+		            ) A
+		            WHERE CHAT_NAME.CHAT_SEQ = A.CHAT_SEQ
+		            AND CHAT_NAME.MEM_ID = A.MEM_ID
+		        ) B
+		        WHERE CHAT.CHAT_ST = 'Y'
+		        AND CHAT.CHAT_SEQ = B.CHAT_SEQ
+		    ) C
+		    WHERE MESSAGE.CHAT_SEQ = C.CHAT_SEQ
+		    AND MESSAGE.MESSAGE_MEM_ID != #{mem_id}
+		    AND MESSAGE.MESSAGE_DT > to_char(C.MEM_OUTTM - 1/(24*60), 'YYYYMMDD,AM HH:MI')
+		    GROUP BY MESSAGE.CHAT_SEQ
+		) D
+		WHERE CHAT_NAME.CHAT_SEQ = D.CHAT_SEQ
+		AND CHAT_NAME.MEM_ID = #{mem_id}
+		]]>
+	</select>
+	
+	<!-- 채팅방 이름 변경 -->
+	<update id="updateChattingRoom" parameterType="Chat_nameVO">
+		UPDATE CHAT_NAME
+		SET NAME = #{name}
+		WHERE CHAT_SEQ = #{chat_seq}
+		AND MEM_ID = #{mem_id}
+	</update>
+	
+	<!-- 채팅방 나가기 -->
+	<delete id="deleteChattingRoom" parameterType="java.util.Map">
+		DELETE FROM CHAT_NAME
+		WHERE MEM_ID = #{mem_id}
+		AND CHAT_SEQ = #{chat_seq}
+	</delete>
+	
+	<!-- 해당 유저와 채팅방 체크 -->
+	<select id="selectChatName" parameterType="Chat_nameVO" resultType="Chat_nameVO">
+		SELECT CHAT_SEQ, NAME, MEM_ID
+		FROM CHAT_NAME
+		WHERE CHAT_SEQ = #{chat_seq}
+		AND MEM_ID = #{mem_id}
+	</select>
+	
+</mapper>

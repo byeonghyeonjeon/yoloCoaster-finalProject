@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="friend">
+
+	<!-- 회원의 친구목록 호출 -->
+	<select id="selectFriendList" parameterType="MemberVO" resultType="FriendMemberVO">
+		SELECT MEMBER.MEM_ID AS mem_id, MEMBER.MEM_NAME mem_name, MEMBER.MEM_NICK mem_nick, MEMBER.MEM_PROFILE mem_profile, MEMBER.MEM_ST mem_st, MYFRIEND.FRIEND_REQUEST friend_request, MYFRIEND.FRIEND_ST friend_st
+		FROM MEMBER,
+		(
+			SELECT FRIEND_REQUEST, FRIEND_ST, FRIEND_ID, MEM_ID
+			FROM FRIEND
+			WHERE FRIEND_ID = #{mem_id}
+		) MYFRIEND
+		WHERE MEMBER.MEM_ID = MYFRIEND.MEM_ID
+			AND MEMBER.MEM_ST = 'Y'
+	</select>
+	
+	<!-- 친구로 요청할 멤버 찾기(친구테이블에 없거나 또는 친구테이블에 있으나 요청중이거나) 검색에 쓰일 아이디와 내 아이디-->
+	<select id="searchFriend" parameterType="Map" resultType="FriendMemberVO">
+		SELECT A.MEM_ID AS mem_id, A.MEM_PROFILE AS mem_profile, B.FRIEND_REQUEST AS friend_request
+		FROM MEMBER A, (
+		SELECT FRIEND_ID, FRIEND_REQUEST
+		   FROM FRIEND
+		   WHERE MEM_ID = #{mem_id}
+		   AND FRIEND_REQUEST = 'W'
+		   AND FRIEND_ID LIKE '%' || #{searchMem_id} || '%'
+		
+		UNION
+		
+		SELECT MEM_ID, MEM_PROFILE
+		    FROM MEMBER
+		    WHERE MEM_ID != #{mem_id}
+		    AND MEM_ID LIKE '%' || #{searchMem_id} || '%'
+		    AND MEM_ST = 'Y'
+		    AND MEM_ID NOT IN 
+		    ((SELECT FRIEND_ID FROM FRIEND WHERE MEM_ID = #{mem_id})
+		    UNION (SELECT MEM_ID FROM FRIEND WHERE FRIEND_ID = #{mem_id} AND FRIEND_REQUEST = 'W'))
+		) B
+		WHERE A.MEM_ID = B.FRIEND_ID
+	</select>
+	
+
+	<!-- 친구 삭제시 유저의 아이디와 친구 아이디를 이용 -->
+	<delete id="deleteFriend" parameterType="java.util.Map">
+		DELETE FROM FRIEND
+		WHERE (MEM_ID = #{mem_id} AND FRIEND_ID = #{friend_id})
+			OR (MEM_ID = #{friend_id} AND FRIEND_ID = #{mem_id})
+	</delete>
+	
+	<!-- 친구 수락시 서로에게 친구이므로 2개를 insert -->
+	<insert id="addFriend" parameterType="java.util.List">
+		INSERT INTO FRIEND (FRIEND_SEQ, MEM_ID, FRIEND_ID, FRIEND_REQUEST, FRIEND_ST)
+			SELECT FRIEND_SEQ.NEXTVAL, INNER_VIEW.*
+			FROM (
+			    <foreach collection="list" item="map" index="index" separator=" UNION ALL ">
+			    	SELECT #{map.mem_id} AS mem_id, #{map.friend_id} AS friend_id, 'Y' AS friend_request, 'N' AS friend_st FROM DUAL
+			    </foreach>
+			) INNER_VIEW
+	</insert>
+	
+	<!-- 친구 요청시 -->
+	<insert id="createFriend" parameterType="java.util.Map">
+		<selectKey order="BEFORE" keyProperty="friend_seq" resultType="int">
+    		SELECT FRIEND_SEQ.NEXTVAL FROM DUAL
+  		</selectKey>
+		INSERT INTO FRIEND (FRIEND_SEQ, MEM_ID, FRIEND_ID, FRIEND_REQUEST, FRIEND_ST)
+		VALUES (#{friend_seq}, #{mem_id}, #{friend_id}, 'W', 'N')
+	</insert>
+	
+	<!-- 친구 요청 취소시 -->
+	<delete id="cancelFriend" parameterType="java.util.Map">
+		DELETE FROM FRIEND
+		WHERE MEM_ID = #{mem_id} AND FRIEND_ID = #{friend_id}
+	</delete>
+	
+	<!-- 친구 요청 거절시 -->
+	<delete id="refuseFriend" parameterType="java.util.Map">
+		DELETE FROM FRIEND
+		WHERE MEM_ID = #{friend_id} AND FRIEND_ID = #{mem_id}
+	</delete>
+	
+	
+	
+</mapper>

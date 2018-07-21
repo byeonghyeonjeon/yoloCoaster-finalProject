@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="category">
+	
+	<!-- 해당 게시판의 글 수를 가져옴 -->
+	<select id="selectCategoryList" parameterType="CategoryVO" resultType="CategoryVO" >
+		SELECT *
+		FROM CATEGORY
+		WHERE cate_st = 'Y'
+	</select>
+</mapper>

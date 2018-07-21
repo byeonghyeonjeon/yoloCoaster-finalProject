@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>														 
+ 		<typeAlias alias="AccountVO" type="com.yolo.model.AccountVO" /> 
+		<typeAlias alias="AreaVO" type="com.yolo.model.AreaVO" />
+		<typeAlias alias="BasicinfoVO" type="com.yolo.model.BasicinfoVO" />
+		<typeAlias alias="BlacklistVO" type="com.yolo.model.BlacklistVO" />
+		<typeAlias alias="BoardVO" type="com.yolo.model.BoardVO" />
+		<typeAlias alias="BookVO" type="com.yolo.model.BookVO" />
+		<typeAlias alias="Bookmark_areaVO" type="com.yolo.model.Bookmark_areaVO" />
+		<typeAlias alias="Bookmark_scheVO" type="com.yolo.model.Bookmark_scheVO" />
+		<typeAlias alias="CategoryVO" type="com.yolo.model.CategoryVO" />
+		<typeAlias alias="Chat_nameVO" type="com.yolo.model.Chat_nameVO" />
+		<typeAlias alias="ChatVO" type="com.yolo.model.ChatVO" />
+		<typeAlias alias="Content_detailVO" type="com.yolo.model.Content_detailVO" />
+		<typeAlias alias="Detailinfo_courseVO" type="com.yolo.model.Detailinfo_courseVO" />
+		<typeAlias alias="Detailinfo_eventVO" type="com.yolo.model.Detailinfo_eventVO" />
+		<typeAlias alias="Detailinfo_leportsVO" type="com.yolo.model.Detailinfo_leportsVO" />
+		<typeAlias alias="DetailinfocultureVO" type="com.yolo.model.DetailinfocultureVO" />
+		<typeAlias alias="DetailinfotourVO" type="com.yolo.model.DetailinfotourVO" />
+		<typeAlias alias="DutchVO" type="com.yolo.model.DutchVO" />
+		<typeAlias alias="File_addVO" type="com.yolo.model.File_addVO" />
+		<typeAlias alias="FriendVO" type="com.yolo.model.FriendVO" />
+		<typeAlias alias="GoodVO" type="com.yolo.model.GoodVO" />
+		<typeAlias alias="JoininfoVO" type="com.yolo.model.JoininfoVO" />
+		<typeAlias alias="Like_areaVO" type="com.yolo.model.Like_areaVO" />
+		<typeAlias alias="LoginInfoVO" type="com.yolo.model.LoginInfoVO" />
+		<typeAlias alias="MemberVO" type="com.yolo.model.MemberVO" />
+		<typeAlias alias="MessageVO" type="com.yolo.model.MessageVO" />
+		<typeAlias alias="PboardVO" type="com.yolo.model.PboardVO" />
+		<typeAlias alias="RepeatInfo_courseVO" type="com.yolo.model.RepeatInfo_courseVO" />
+		<typeAlias alias="RepeatInfo_ectVO" type="com.yolo.model.RepeatInfo_ectVO" />
+		<typeAlias alias="ReplyVO" type="com.yolo.model.ReplyVO" />
+		<typeAlias alias="ReviewVO" type="com.yolo.model.ReviewVO" />
+		<typeAlias alias="Schedule_detailVO" type="com.yolo.model.Schedule_detailVO" />
+		<typeAlias alias="ScheduleVO" type="com.yolo.model.ScheduleVO" />
+		<typeAlias alias="Star_scoreVO" type="com.yolo.model.Star_scoreVO" />
+		<typeAlias alias="TagVO" type="com.yolo.model.TagVO" />
+		<typeAlias alias="Vote_optionVO" type="com.yolo.model.Vote_optionVO" />
+		<typeAlias alias="VoterVO" type="com.yolo.model.VoterVO" />
+		<typeAlias alias="VoteVO" type="com.yolo.model.VoteVO" />
+		<typeAlias alias="FriendMemberVO" type="com.yolo.model.FriendMemberVO" />
+		<typeAlias alias="PageVO" type="com.yolo.model.PageVO" />
+		<typeAlias alias="Chat_groupVO" type="com.yolo.model.Chat_groupVO" />
+		<typeAlias alias="ChattingRoomVO" type="com.yolo.model.ChattingRoomVO" />
+		<typeAlias alias="VoteTotalVO" type="com.yolo.model.VoteTotalVO"/>
+		<typeAlias alias ="VoteSeniorVO" type="com.yolo.model.VoteSeniorVO"/>
+		<typeAlias alias ="TravelVO" type="com.yolo.model.TravelVO"/>
+		<typeAlias alias ="AccountSeniorVO" type="com.yolo.model.AccountSeniorVO"/>
+		<typeAlias alias ="StarVO" type="com.yolo.model.StarVO"/>
+		<typeAlias alias ="BookSearchVO" type="com.yolo.model.BookSearchVO"/>
+		<typeAlias alias ="AccountSearchVO" type="com.yolo.model.AccountSearchVO"/>
+		<typeAlias alias ="TagCountVO" type="com.yolo.model.TagCountVO"/>
+		<typeAlias alias ="MemJoinInfoVO" type="com.yolo.model.MemJoinInfoVO"/>
+		<typeAlias alias ="ChatGroupCountVO" type="com.yolo.model.ChatGroupCountVO"/>
+		
+	</typeAliases>
+
+
+	<mappers>
+		<mapper resource="com/yolo/db/mybatis/sqlmap/member.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/login.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/schedule.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/vote.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/category.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/friend.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/board.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/chat.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/chatGroup.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/chatName.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/scheDetail.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/message.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/fileAdd.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/basicInfo.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/likeArea.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/book.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/good.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/account.xml" /> 
+		<mapper resource="com/yolo/db/mybatis/sqlmap/index.xml" /> 
+		<mapper resource="com/yolo/db/mybatis/sqlmap/adminBoard.xml" /> 
+		<mapper resource="com/yolo/db/mybatis/sqlmap/adminTravel.xml" />
+		<mapper resource="com/yolo/db/mybatis/sqlmap/adminMember.xml" /> 
+													
+	</mappers>
+
+</configuration>
+	

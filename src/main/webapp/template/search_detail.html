@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <style>
+    nav.navbar {
+      background: linear-gradient(to right, #a1f276, #5ce09b);
+    }
+
+    .tobNavbarName {
+      color: black;
+    }
+
+    .nav>li>a:focus,
+    .nav>li>a:hover {
+      background-color: #eee;
+    }
+
+    .navbar-header .navbar-toggle {
+      background-color: #1BA39C;
+    }
+
+    .navbar-header .icon-bar {
+      background-color: #5ce09b;
+    }
+
+    .navbar-brand img {
+      width: 10%;
+    }
+
+    #searchForm {
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      #body {
+        padding-top: 160px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      #body,
+      #leftbar,
+      #rightbar {
+        padding-top: 110px;
+      }
+    }
+
+    #footer img {
+      width: 60px;
+    }
+
+    #footer table {
+      display: inline-block;
+    }
+
+    #footer td {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+
+
+
+    /* 상세검색 페이지 CSS */
+
+    .visible-xs-block label {
+      text-align: center;
+      padding-top: 7px;
+    }
+  </style>
+
+  <!-- 기본 템플릿 css 수정 ㄴㄴ -->
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */
+
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+
+    .row.content {
+      height: 450px
+    }
+
+    /* Set gray background color and 100% height */
+
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* Set black background color, white text and some padding */
+
+    footer {
+      background-color: #ffffff;
+      color: white;
+      padding: 15px;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {
+        height: auto;
+      }
+    }
+  </style>
+
+
+
+
+
+  <!-- 날짜 받기용 script 및 css -->
+  <script src="bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <script src="bootstrap-datepicker/locales/bootstrap-datepicker.kr.min.js"></script>
+  <link rel="stylesheet" href="bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+  <link rel="stylesheet" href="bootstrap-datepicker/css/bootstrap-datepicker3.standalone.min.css">
+
+  <script type="text/javascript">
+    $(function() {
+      $('.datepicker').datepicker({
+        autoclose: true,
+        format: "yyyy-mm-dd",
+        maxViewMode: 1,
+        todayBtn: "linked",
+        language: "kr",
+        orientation: "bottom auto",
+        todayHighlight: true
+      });
+
+    })
+  </script>
+
+
+  <!-- 상세검색 페이지 -->
+  <script type="text/javascript">
+    $(function() {
+      $('.areacode').on('change', function() {
+        $('.areacode').val($(this).val());
+      });
+
+      $('.contenttypeid').on('change', function() {
+        $('.contenttypeid').val($(this).val());
+        if ($(this).val() == 15) {
+          $('.setEvent').css('display', '');
+        } else {
+          $('.setEvent').css('display', 'none');
+          $('.inputDateStart').val('');
+          $('.inputDateEnd').val('');
+        }
+      });
+
+      $('.inputDateStart').on('change', function() {
+        $('.inputDateStart').val($(this).val());
+      });
+
+      $('.inputDateEnd').on('change', function() {
+        $('.inputDateEnd').val($(this).val());
+      });
+
+      $('.searchText').on('keyup', function() {
+        $('.searchText').val($(this).val());
+      });
+
+
+      //날짜를 YYYYMMDD 형태로 표현
+      function dateFormat(date){
+        return date
+      }
+
+      //한달 추가 함수
+      function add1Month(date){
+        var month = date.getMonth()+1;//getMonth : 0~11
+        if (month == '12') {
+          month = '1';
+        }
+        return new Date(date.getFullYear(), , date.getDate());
+      }
+
+      // 상세 검색버튼 클릭시 submit 막고 validate 처리
+      $('.searchDetailForm').on('submit', function(event) {
+        //submit 막기
+        event.preventDefault();
+
+
+        var today = new Date();
+        var todayFormatted = dateFormat(today);
+        var added1MonthFormatted = dateFormat(add1Month(today));
+
+        if ($('.inputDateStart').val() == '') {
+          $('.inputDateStart').val(todayFormatted);
+        }
+        if ($('.inputDateEnd').val() == '') {
+          $('.inputDateEnd').val(added1MonthFormatted);
+        }
+
+
+      });
+
+
+      //   <div class="form-group has-error has-feedback">
+      //   <div class="col-sm-10">
+      //     <input type="text" class="form-control" id="inputError">
+      //     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+      //   </div>
+      // </div>
+
+    })
+  </script>
+
+
+</head>
+
+<body>
+
+  <!-- 상단 메뉴바 -->
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+
+        <!-- id가 topNavbar인 nav를 목록으로 만듬 -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <!-- index페이지로 이동 -->
+        <a class="navbar-brand" href="index.html">
+          <span>욜로코스터</span>
+        </a>
+      </div>
+
+      <!-- 메뉴 목록 -->
+      <div class="collapse navbar-collapse navbar-right" id="topNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#" class="tobNavbarName">회사개요</a>
+            <li><a href="#" class="tobNavbarName">지역검색</a></li>
+            <li><a href="#" class="tobNavbarName">축제검색</a></li>
+            <li><a href="#" class="tobNavbarName">일정검색</a></li>
+            <li><a href="#" class="tobNavbarName">채팅방</a></li>
+            <li><a href="#" class="tobNavbarName">게시판</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle tobNavbarName" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-user"></i><span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#" class="tobNavbarName">친구목록</a></li>
+                <li><a href="#" class="tobNavbarName">마이페이지</a></li>
+                <li><a href="#" class="tobNavbarName">로그인</a></li>
+                <li><a href="#" class="tobNavbarName">회원가입</a></li>
+              </ul>
+            </li>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 검색창 -->
+    <div class="container-fluid">
+      <form class="navbar-form" action="" id="searchForm">
+        <select class="form-control">
+          <option>키워드</option>
+          <option>태그</option>
+        </select>
+        <div class="input-group">
+          <input type="text" class="form-control searchText" placeholder="검색할 내용을 입력하세요" id="searchText" name="searchText">
+          <div class="input-group-btn">
+            <button class="btn btn-default" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </nav>
+
+
+  <div class="container-fluid text-center">
+    <div class="row content">
+
+
+      <!-- left 바 -->
+      <div class="col-sm-2 sidenav" id="leftbar">
+
+
+
+      </div>
+
+
+      <!-- 가운데 바디 -->
+      <div class="col-sm-8 text-left" id="body">
+
+
+        <h3>키워드 상세 검색</h3>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3 hidden-xs">
+            <label>지역</label>
+          </div>
+          <div class="col-sm-3 hidden-xs">
+            <label>관광타입</label>
+          </div>
+          <div class="col-sm-3 hidden-xs setEvent">
+            <label>시작일</label>
+          </div>
+          <div class="col-sm-3 hidden-xs setEvent">
+            <label>종료일</label>
+          </div>
+        </div>
+
+        <div class="row hidden-xs">
+          <form class="searchDetailForm">
+            <div class="col-sm-3 form-group ">
+              <select class="form-control areacode" name="areacode">
+              <option value="">전국</option>
+              <option value="1">서울</option>
+              <option value="2">인천</option>
+              <option value="3">대전</option>
+              <option value="4">대구</option>
+              <option value="5">광주</option>
+              <option value="6">부산</option>
+              <option value="7">울산</option>
+              <option value="8">세종</option>
+              <option value="31">경기도</option>
+              <option value="32">강원도</option>
+              <option value="33">충청북도</option>
+              <option value="34">충청남도</option>
+              <option value="35">경상북도</option>
+              <option value="36">경상남도</option>
+              <option value="37">전라북도</option>
+              <option value="38">전라남도</option>
+              <option value="39">제주도</option>
+            </select>
+            </div>
+
+            <div class="col-sm-3 form-group">
+              <select class="form-control contenttypeid" name="contenttypeid">
+              <option value="">전체</option>
+              <option value="12">관광지</option>
+              <option value="14">문화시설</option>
+              <option value="25">여행코스</option>
+              <option value="28">레포츠</option>
+              <option value="15">축제</option>
+            </select>
+            </div>
+
+
+            <div class="col-sm-3 form-group setEvent">
+              <input type="text" class="form-control datepicker inputDateStart" id="inputDateStart" name="inputDateStart" placeholder="시작일을 입력하세요">
+            </div>
+
+
+            <div class="col-sm-3 form-group setEvent">
+              <input type="text" class="form-control datepicker inputDateEnd" id="inputDateEnd" name="inputDateEnd" placeholder="종료일을 입력하세요">
+            </div>
+        </div>
+
+
+        <div class="row hidden-xs">
+          <div class="col-sm-4 col-sm-offset-4">
+            <input type="text" class="form-control searchText" placeholder="키워드를 입력하세요" id="searchText" name="searchText">
+          </div>
+        </div>
+        <br>
+        <div class="row hidden-xs">
+          <div class="col-sm-4 col-sm-offset-4">
+            <button class="btn btn-success btn-block" type="submit">검색</button>
+          </div>
+        </div>
+        </form>
+
+
+
+        <div class="visible-xs-block">
+          <form class="form-horizontal searchDetailForm">
+
+
+            <div class="form-group">
+              <label class="col-xs-4 control-label">지역</label>
+              <div class="col-xs-8">
+                <select class="form-control areacode" name="areacode">
+                <option value="">전국</option>
+                <option value="1">서울</option>
+                <option value="2">인천</option>
+                <option value="3">대전</option>
+                <option value="4">대구</option>
+                <option value="5">광주</option>
+                <option value="6">부산</option>
+                <option value="7">울산</option>
+                <option value="8">세종</option>
+                <option value="31">경기도</option>
+                <option value="32">강원도</option>
+                <option value="33">충청북도</option>
+                <option value="34">충청남도</option>
+                <option value="35">경상북도</option>
+                <option value="36">경상남도</option>
+                <option value="37">전라북도</option>
+                <option value="38">전라남도</option>
+                <option value="39">제주도</option>
+              </select>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="col-xs-4 control-label">관광타입</label>
+              <div class="col-xs-8">
+                <select class="form-control contenttypeid" name="contenttypeid">
+                <option value="">전체</option>
+                <option value="12">관광지</option>
+                <option value="14">문화시설</option>
+                <option value="25">여행코스</option>
+                <option value="28">레포츠</option>
+                <option value="15">축제</option>
+              </select>
+              </div>
+            </div>
+
+
+            <div class="form-group setEvent">
+              <label class="col-xs-4 control-label">시작일</label>
+              <div class="col-xs-8">
+                <input type="text" class="form-control datepicker inputDateStart" id="inputDateStart" name="inputDateStart" placeholder="시작일을 입력하세요">
+              </div>
+            </div>
+
+
+            <div class="form-group setEvent">
+              <label class="col-xs-4 control-label">종료일</label>
+              <div class="col-xs-8">
+                <input type="text" class="form-control datepicker inputDateEnd" id="inputDateEnd" name="inputDateEnd" placeholder="종료일을 입력하세요">
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <div class="col-sm-4 col-sm-offset-4">
+                <input type="text" class="form-control searchText" placeholder="키워드를 입력하세요" id="searchText" name="searchText">
+              </div>
+            </div>
+
+
+            <br>
+
+
+            <div class="row">
+              <div class="col-sm-4 col-sm-offset-4">
+                <button class="btn btn-success btn-block" type="submit">검색</button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+        <hr>
+
+      </div>
+
+
+      <!-- right 바 -->
+      <div class="col-sm-2 sidenav" id="rightbar">
+        <div class="well">
+          <p>ADS</p>
+        </div>
+        <div class="well">
+          <p>ADS</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+</body>
+
+</html>

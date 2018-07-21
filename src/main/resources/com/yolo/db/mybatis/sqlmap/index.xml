@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="index">
+
+	<!-- 메인화면에 관심지역 4개 조회 -->
+	<select id="areaOfInterest" parameterType="String" resultType="TravelVO">
+		<![CDATA[
+			SELECT *
+			FROM basicinfo
+			WHERE areacode in (
+			  SELECT area_code
+			  FROM like_area
+			  WHERE mem_id = #{mem_id}
+			)
+			AND rownum <= 4
+		]]>
+	</select>
+	
+	<!--  관심지역 리스트 더보기 페이지네이션 -->
+	<select id="areaRecommendPage" parameterType="java.util.Map" resultType="TravelVO">
+	<![CDATA[
+		SELECT X.*
+		FROM 
+			(
+			   SELECT ROWNUM rnum, A.* FROM 
+				(
+					SELECT * FROM BASICINFO
+		      		WHERE AREACODE 
+	      			IN 
+	      				(
+							SELECT AREA_CODE
+							FROM LIKE_AREA
+							WHERE MEM_ID = #{mem_id}
+	        			)
+					ORDER BY TITLE DESC
+				) A
+				WHERE ROWNUM <= #{pageNo}*10
+			) X
+		WHERE X.rnum >= (#{pageNo}-1)*10 + 1
+	]]>
+	</select>
+	
+	<!-- 관심지역 총 개수 -->
+	<select id="numberOfAreaOfInterest" parameterType="String" resultType="Integer">
+		SELECT count(*)
+		FROM BASICINFO
+		WHERE AREACODE 
+		IN 
+			(
+			  SELECT AREA_CODE
+			  FROM LIKE_AREA
+			  WHERE MEM_ID = #{mem_id}
+			)
+	</select>
+	
+	<!-- 회원 주소를 기반으로 여행지 추천 4개만 조회 -->
+	<select id="profileRecommend" parameterType="String" resultType="TravelVO">
+		<![CDATA[
+			SELECT *
+			FROM BASICINFO
+			WHERE AREACODE 
+				IN 
+					(
+						SELECT MEM_ADD1 
+						FROM MEMBER 
+						WHERE MEM_ID = #{mem_id}
+					)
+			AND rownum <= 4
+		]]>
+	</select>
+	
+	<!-- 프로필 기반 여행지 추천 개수 -->
+	<select id="numberOfProfileRecommend" parameterType="String" resultType="Integer">
+		SELECT count(*)
+		FROM BASICINFO
+		WHERE AREACODE
+			IN 
+				(
+					SELECT MEM_ADD1 
+					FROM MEMBER 
+					WHERE MEM_ID = #{mem_id}
+				)
+	</select>
+	
+	<!--  프로필 기반 추천 여행지 리스트 더보기 페이지네이션 -->
+	<select id="profileRecommendPage" parameterType="java.util.Map" resultType="TravelVO">
+	<![CDATA[
+		SELECT X.*
+		FROM 
+			(
+			   SELECT ROWNUM rnum, A.* FROM 
+				(
+					SELECT *
+					FROM BASICINFO
+					WHERE AREACODE
+						IN 
+							(
+								SELECT MEM_ADD1 
+								FROM MEMBER 
+								WHERE MEM_ID = #{mem_id}
+							)
+					ORDER BY TITLE DESC
+				) A
+				WHERE ROWNUM <= #{pageNo}*10
+			) X
+		WHERE X.rnum >= (#{pageNo}-1)*10 + 1
+	]]>
+	</select>
+	
+	<!-- 지역 축제 추천 여행지 리스트 더보기 -->
+	<select id="eventRecommendPage" parameterType="java.util.Map" resultType="TravelVO">
+	<![CDATA[
+		SELECT X.*
+		FROM 
+			(
+			   SELECT ROWNUM rnum, A.* FROM 
+				(
+					SELECT *
+					FROM BASICINFO
+					WHERE AREACODE
+						IN 
+							(
+								SELECT MEM_ADD1 
+								FROM MEMBER 
+								WHERE MEM_ID = #{mem_id}
+							)
+					AND CONTENTTYPEID = '15'
+					ORDER BY TITLE DESC
+				) A
+				WHERE ROWNUM <= #{pageNo}*10
+			) X
+		WHERE X.rnum >= (#{pageNo}-1)*10 + 1
+	]]>
+	</select>
+	
+	<!-- 지역축제 추천 여행지 개수 -->
+	<select id="numberOfEventRecommend" parameterType="String" resultType="Integer">
+		SELECT count(*)
+		FROM BASICINFO
+		WHERE AREACODE
+			IN 
+				(
+					SELECT MEM_ADD1 
+					FROM MEMBER 
+					WHERE MEM_ID = #{mem_id}
+				)
+		AND CONTENTTYPEID = '15'
+	</select>
+	
+	<!-- 지역축제 추전 여행지 4개만  -->
+	<select id="eventRecommend" parameterType="String" resultType="TravelVO">
+	<![CDATA[
+		SELECT *
+		FROM BASICINFO
+		WHERE AREACODE
+		  IN 
+		    (
+		      SELECT MEM_ADD1 
+		      FROM MEMBER 
+		      Where Mem_Id = #{mem_id}
+		    )
+		AND CONTENTTYPEID = '15'
+		AND rownum <= 4
+	]]>
+	</select>
+	
+	
+</mapper>

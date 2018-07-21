@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="schedule">
+
+	<select id="getScheduleMemId" parameterType="int" resultType="String">
+		SELECT schedule_mem_id FROM schedule WHERE schedule_seq =#{schedule_seq}
+	</select>
+
+	<!-- 마이켈린더 스케쥴 전체 조회 -->
+	<select id="getMemberScheduleList" resultType="ScheduleVO" parameterType="String">
+		SELECT * 
+		FROM SCHEDULE 
+		WHERE CHAT_SEQ = '1' 
+		AND SCHEDULE_MEM_ID=#{mem_id}
+	</select>
+	
+	<!--개인 일정 추가 -->
+	<insert id="insertSchedule" parameterType="ScheduleVO">
+		
+		insert into schedule (
+		SCHEDULE_SEQ, SCHEDULE_MEM_ID, CHAT_SEQ, SCHEDULE_TITLE,
+		 SCHEDULE_START, SCHEDULE_END, SCHEDULE_PRIVATE, SCHEDULE_LABEL	
+		) values(
+		SCHEDULE_SEQ.nextval,#{schedule_mem_id}, 1, #{schedule_title}, 
+		#{schedule_start}, #{schedule_end}, #{schedule_private}, #{schedule_label}
+		)
+	</insert>
+	
+	<!--스케쥴 하나 조회 -->
+	<select id="getScheduleDetail" resultType="ScheduleVO" parameterType="int">
+		SELECT * 
+		FROM SCHEDULE 
+		WHERE SCHEDULE_SEQ = #{schedule_seq}
+	</select>
+	
+	<!-- 스케줄 모달창에서 수정 버튼 클릭했을때 업데이트 -->
+	<update id="modifyScheduleModal" parameterType="ScheduleVO">
+	UPDATE SCHEDULE
+	SET SCHEDULE_TITLE = #{schedule_title},
+		SCHEDULE_START = #{schedule_start},
+		SCHEDULE_END = #{schedule_end},
+		SCHEDULE_LABEL = #{schedule_label},
+		SCHEDULE_PRIVATE = #{schedule_private}
+	WHERE SCHEDULE_SEQ = #{schedule_seq}
+	</update>
+	
+	<!-- 마이캘린더에서 드래그 수정 -->
+	<update id="dragScheduleModify" parameterType="ScheduleVO">
+	UPDATE SCHEDULE
+	SET SCHEDULE_START = #{schedule_start},
+		SCHEDULE_END = #{schedule_end}
+	WHERE SCHEDULE_SEQ = #{schedule_seq}
+	</update>
+	
+	<!-- 스케줄 모달창에서 삭제 버튼 클릭했을때 Delete -->
+	<delete id="deleteScheduleModal" parameterType="int">
+		DELETE
+		FROM SCHEDULE
+		WHERE SCHEDULE_SEQ = #{schedule_seq}
+	</delete>
+
+	<insert id="insertContentDetail" parameterType="Content_detailVO">
+		INSERT
+		INTO CONTENT_DETAIL
+		  (
+		    CONTENT_SEQ,    detail_seq,    content_title,
+		    CONTENT_ORDER,    content_shape,    content_content
+		  )
+		  VALUES
+		  (
+		   	CONTENT_SEQ.nextval,    #{detail_seq},    #{content_title,jdbcType=VARCHAR},
+		    #{content_order},    #{content_shape,jdbcType=VARCHAR},    #{content_content,jdbcType=VARCHAR}
+
+		  )
+	</insert>
+	
+	<!-- 북마크 추가 -->
+	<insert id="bookMarkscheduleInsert" parameterType="ScheduleVO">
+	
+		<selectKey keyProperty="schedule_seq" resultType="int" order="BEFORE">
+			SELECT SCHEDULE_SEQ.nextval FROM DUAL
+		</selectKey>	
+		
+		INSERT INTO SCHEDULE
+			(
+				SCHEDULE_SEQ, SCHEDULE_MEM_ID, CHAT_SEQ, SCHEDULE_TITLE,
+				SCHEDULE_START, SCHEDULE_END, SCHEDULE_PRIVATE, SCHEDULE_LABEL
+			)
+		VALUES
+			(
+				#{schedule_seq}, #{schedule_mem_id}, 1, #{schedule_title},
+				#{schedule_start}, #{schedule_end},'N','BDBDBD'
+			)
+
+	</insert>
+	
+	<!-- 일정 즐겨찾기 리스트 가져오기 -->
+	<select id="myCalendarBookMarkList" parameterType="String" resultType="Bookmark_scheVO">
+		SELECT DISTINCT A.BOOKMARK_SEQ
+		     , B.SCHEDULE_TITLE
+		     , A.MEM_ID
+		FROM BOOKMARK_SCHE A INNER JOIN SCHEDULE B	ON A.SCHEDULE_SEQ = B.SCHEDULE_SEQ
+		WHERE A.mem_id = #{mem_id}
+	</select>
+	
+	<!-- 북마크에서 일정을 삭제하는 쿼리 -->
+	<delete id="myCalendarBookMarkCheckDelete" parameterType="Bookmark_scheVO">
+		DELETE FROM BOOKMARK_SCHE 
+		WHERE BOOKMARK_SEQ = #{bookmark_seq}
+		AND MEM_ID = #{mem_id}
+	</delete>
+	
+	
+	
+	<!-- 채팅방 캘린더/////////////////////////////////////////////////////////// -->
+	
+	<!-- 채팅방 켈린더에서 일정 목록들을 가져오는 메서드 -->
+	<select id="getchatScheduleList" parameterType="ScheduleVO" resultType="ScheduleVO">
+		SELECT * FROM SCHEDULE where chat_seq = #{chat_seq}
+	</select>
+	
+	<!-- 채팅방 캘린더에서 일정을 추가하는 메서드 -->
+	<insert id="insertChatScheduleModal" parameterType="ScheduleVO">
+	
+		<selectKey keyProperty="schedule_seq" resultType="int" order="BEFORE">
+			SELECT SCHEDULE_SEQ.nextval FROM DUAL
+		</selectKey>
+		insert into schedule (
+		SCHEDULE_SEQ, SCHEDULE_MEM_ID, CHAT_SEQ, SCHEDULE_TITLE,
+		 SCHEDULE_START, SCHEDULE_END, SCHEDULE_PRIVATE, SCHEDULE_LABEL
+		) values(
+		#{schedule_seq},#{schedule_mem_id}, #{chat_seq}, #{schedule_title}, 
+		#{schedule_start}, #{schedule_end}, #{schedule_private}, #{schedule_label}
+		)
+	</insert>
+	
+	<!-- 채팅방 스케줄 모달창에서 수정 버튼 클릭했을때 업데이트 -->
+	<update id="chatModifyScheduleModal" parameterType="ScheduleVO">
+	UPDATE SCHEDULE
+	SET SCHEDULE_TITLE = #{schedule_title},
+		SCHEDULE_START = #{schedule_start},
+		SCHEDULE_END = #{schedule_end},
+		SCHEDULE_LABEL = #{schedule_label},
+		SCHEDULE_PRIVATE = #{schedule_private}
+	WHERE SCHEDULE_SEQ = #{schedule_seq}
+	</update>
+	
+	<!-- 채팅방 스케줄 모달창에서 삭제 버튼 클릭했을때 Delete -->
+	<delete id="chatDeleteScheduleModal" parameterType="int">
+		DELETE
+		FROM SCHEDULE
+		WHERE SCHEDULE_SEQ = #{schedule_seq}
+	</delete>
+	
+	<!-- 채팅방 캘린더에서 드래그 수정 -->
+	<update id="chatDragScheduleModify" parameterType="ScheduleVO">
+	UPDATE SCHEDULE
+	SET SCHEDULE_START = #{schedule_start},
+		SCHEDULE_END = #{schedule_end}
+	WHERE SCHEDULE_SEQ = #{schedule_seq}
+	</update>
+	
+	
+	<select id="selectScheListForBoard" resultType="ScheduleVO">
+	SELECT     
+    schedule_seq,
+    schedule_mem_id,
+    chat_seq,
+    schedule_title,
+    (SELECT substr(schedule_start,1,8) FROM dual) schedule_start,
+        (select substr(schedule_start,1,8) from dual) schedule_end,
+    (
+        SELECT schedule_end - schedule_start FROM dual
+    ) "schedule_date",
+    (   
+        SELECT 
+        count(*)
+        FROM  schedule_detail b ,content_detail c
+        WHERE b.schedule_seq = d.schedule_seq
+        AND b.detail_seq = C.detail_seq
+        AND C.content_shape='01'
+    )"schedule_count" 
+    FROM schedule d WHERE schedule_private='Y' ORDER BY schedule_seq DESC
+	</select>
+	
+	<!-- 해당 게시판의 해당 페이지의 모든 글을 출력 -->
+	<select id="getSchePageList" parameterType="PageVO" resultType="ScheduleVO">
+	<![CDATA[
+			SELECT 
+			schedule_seq,
+		    schedule_mem_id,
+		    chat_seq,
+		    schedule_title,
+		    (SELECT substr(schedule_start,1,8) FROM dual) schedule_start,
+		        (select substr(schedule_start,1,8) from dual) schedule_end,
+		    (
+		        SELECT schedule_end - schedule_start FROM dual
+		    ) "schedule_date",
+		    (   
+		        SELECT 
+		        count(*)
+		        FROM  schedule_detail b ,content_detail c
+		        WHERE b.schedule_seq = d.schedule_seq
+		        AND b.detail_seq = C.detail_seq
+		        AND C.content_shape='01'
+		    )"schedule_count" 
+			FROM 
+				    (SELECT ROWNUM rnum, A.* FROM 
+					(SELECT * FROM schedule
+	     		where schedule_private = 'Y'
+					ORDER BY schedule_seq DESC) A
+				   	WHERE ROWNUM <= #{pageNo}*10) d
+			WHERE d.rnum >= (#{pageNo}-1)*10 + 1
+	]]>
+	</select>
+	
+		<!--일정검색 페이지 갯수  -->
+	<select id="selectScheListForBoardStr" resultType="int">
+	SELECT     
+    	count(*)
+    FROM schedule 
+    where 
+    	schedule_private='Y'
+    	and schedule_title like #{pram}
+	</select>
+	
+	<!-- 일정검색 검색어  -->
+	<select id="getSchePageListStr" parameterType="java.util.Map" resultType="ScheduleVO">
+	<![CDATA[
+			SELECT 
+			schedule_seq,
+		    schedule_mem_id,
+		    chat_seq,
+		    schedule_title,
+		    (SELECT substr(schedule_start,1,8) FROM dual) schedule_start,
+		        (select substr(schedule_start,1,8) from dual) schedule_end,
+		    (
+		        SELECT schedule_end - schedule_start FROM dual
+		    ) "schedule_date",
+		    (   
+		        SELECT 
+		        count(*)
+		        FROM  schedule_detail b ,content_detail c
+		        WHERE b.schedule_seq = d.schedule_seq
+		        AND b.detail_seq = C.detail_seq
+		        AND C.content_shape='01'
+		    )"schedule_count" 
+			FROM 
+				    (SELECT ROWNUM rnum, A.* FROM 
+					(SELECT * FROM schedule
+	     		where schedule_private = 'Y'
+	     		 and schedule_title like #{param}
+					ORDER BY schedule_seq DESC) A
+				   	WHERE ROWNUM <= #{pageNo}*10) d
+			WHERE d.rnum >= (#{pageNo}-1)*10 + 1
+	]]>
+	</select>
+	
+	<select id="selectBookMarkSeq" parameterType="java.util.Map" resultType="int">
+		select schedule_seq
+		from bookmark_sche
+		where mem_id = #{mem_id}
+		and schedule_seq=#{sche_seq}
+	</select>
+	
+	<insert id="insertBookMarkSeq" parameterType="java.util.Map" >
+		INSERT
+		INTO BOOKMARK_SCHE
+	  (	    BOOKMARK_SEQ,	    MEM_ID,	    SCHEDULE_SEQ	  )
+	  VALUES
+	  (
+	    BOOKMARK_SEQ.nextval,
+	    #{mem_id},
+	    #{sche_seq}
+	  )
+	</insert>
+	
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="scheDetail">
+
+
+	<!--세부일정 리스트 조회 -->
+	<select id="selectSchDetail" resultType="Schedule_detailVO" parameterType="int">
+		SELECT DETAIL_SEQ,
+		SCHEDULE_SEQ,
+		detail_step
+		FROM SCHEDULE_DETAIL 
+		where schedule_seq = #{scheduleSeq}
+		order by 3 asc
+	</select>
+	
+	<!--글 내용 리스트 조회 -->
+	<select id="selectContentDetailList" resultType="Content_detailVO" parameterType="int">
+		SELECT *
+		FROM CONTENT_DETAIL 
+		where detail_seq = #{detailSeq}
+	</select>
+	
+	<!-- 처음 일정 생성 -->
+	<insert id="createScheDetail" parameterType="Schedule_detailVO" >
+		INSERT
+		INTO SCHEDULE_DETAIL
+		(
+		  DETAIL_SEQ,    SCHEDULE_SEQ,    DETAIL_STEP,
+		  DETAIL_TITLE,    DETAIL_DT,    DETAIL_PRIVATE,
+		  DETAIL_ST
+		)
+		VALUES
+		(
+		  detail_seq.nextval,    #{schedule_seq},    #{detail_step},
+		  #{detail_title ,jdbcType=VARCHAR},    #{detail_dt ,jdbcType=VARCHAR},    'Y',
+		  'Y'
+		)
+	</insert>
+	
+	<!--개별일정 삭제 unit:one  -->
+	<update id="deleteDetail" parameterType="int">
+		DELETE
+		FROM SCHEDULE_DETAIL
+		WHERE DETAIL_SEQ   = #{detail_seq}
+	</update>
+	
+	<select id="selectBookmarkAreaList" parameterType="java.util.Map" resultType="Bookmark_areaVO">
+		SELECT
+		    *
+		FROM
+		    bookmark_area
+		    where contentid = #{param}
+		     and mem_id =#{mem_id}
+	</select>
+	
+	
+</mapper>

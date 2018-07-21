@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vote">
+
+		<!--vote생성 -->
+	 	<insert id="insertVote" parameterType="VoteVO">	 	
+	 		<selectKey order="BEFORE" keyProperty="vote_seq" resultType="int" >
+	 			SELECT VOTE_SEQ.NEXTVAL FROM DUAL
+	 		</selectKey>
+	 		INSERT INTO VOTE(VOTE_SEQ, CHAT_SEQ, VOTE_TITLE, VOTE_END, VOTE_BLIND, VOTE_ST, MEM_ID)
+			VALUES (#{vote_seq}, #{chat_seq}, #{vote_title}, to_date(#{vote_end},'yyyy.mm.dd hh24:mi'), #{vote_blind}, #{vote_st}, #{mem_id})			
+	 	</insert>
+	 	
+	 	<!-- vote_option생성 -->
+	 	<insert id="insertVoteOption" parameterType="java.util.List">
+	 		INSERT INTO VOTE_OPTION(OPTION_SEQ, VOTE_SEQ, OPTION_ORDER, OPTION_CONTENT, OPTION_HIT)
+				SELECT OPTION_SEQ.NEXTVAL, INNER_VIEW.*
+				FROM( 
+					<foreach collection="list" item="map" index="index" separator=" UNION ALL ">
+						SELECT #{map.vote_seq},#{ map.option_order}, #{map.option_content}, 0 FROM DUAL
+				     </foreach>
+			    )INNER_VIEW	 		
+	 	</insert>
+	
+		<!-- voter 생성 -->
+		<insert id="insertVoter" parameterType="java.util.Map">
+			INSERT INTO VOTER(VOTER_SEQ, VOTE_SEQ, OPTION_SEQ, MEM_ID, VOTER_ST)
+			   SELECT VOTER_SEQ.NEXTVAL AS VOTER_SEQ, #{vote_seq} AS VOTE_SEQ, 0 AS OPTION_SEQ, MEM_ID AS MEM_ID, 'N' AS VOTER_ST
+			   FROM CHAT_GROUP
+			   WHERE CHAT_SEQ = #{chat_seq}
+		</insert>
+		
+		<!-- voteMain 조회 -->
+		<select id="getVoteMain" parameterType="VoteVO" resultType="VoteSeniorVO">
+		SELECT A.vote_seq,
+			   A.chat_seq,
+			   A.vote_title, 
+			   to_char(A.vote_end,'yyyy.mm.dd hh24:mi') as vote_end, 
+			   A.vote_blind, 
+			   A.vote_st, 
+			   A.mem_id,
+			   B.voter_st 
+		FROM
+		(
+		    SELECT *
+		    FROM vote
+		    WHERE chat_seq = #{chat_seq}) A,
+		(
+		    SELECT *
+		    FROM voter
+		    WHERE vote_seq IN (SELECT vote_seq FROM vote WHERE chat_seq = #{chat_seq})
+		    AND mem_id = #{mem_id}) B
+		   WHERE A.vote_seq = B.vote_seq				
+		</select>
+		
+		
+		<!-- voteDetail 조회 -->
+		<select id="getVoteDetail" parameterType="int" resultType="VoteSeniorVO">		
+	    select A.vote_seq,
+		       A.chat_seq,
+		       A.vote_title,
+		       to_char(A.vote_end,'yyyy.mm.dd hh24:mi') as vote_end, 
+		       A.vote_blind, 
+				   A.vote_st, 
+					 A.mem_id,
+		       B.option_seq,
+		       B.option_order,
+		       B.option_content,
+		       B.option_hit         
+		from vote A, vote_option B
+		where A.vote_seq = #{vote_seq}
+		and A.vote_seq = B.vote_seq
+		</select>
+		
+		<!-- voterDetail 조회 -->
+		<select id="getVoterDetail" parameterType="VoteVO" resultType="VoterVO">
+		   SELECT * 
+		   FROM voter
+		   WHERE vote_seq = #{vote_seq}
+		   AND mem_id = #{mem_id}     	
+		</select>
+		
+		<!-- 다시 투표할 경우 option_hit -1 -->
+		<update id="voteOptionReset" parameterType="java.util.Map">
+			<selectKey order="BEFORE" keyProperty="option_hit" resultType="int">
+				SELECT option_hit
+				FROM vote_option
+				WHERE option_seq = #{option_seq}			
+			</selectKey>
+			UPDATE vote_option
+			SET option_hit = #{option_hit}-1
+			WHERE option_seq = #{option_seq}		
+		</update>
+		
+		<!-- Voter 업데이트 -->
+		<update id="voterUpdate" parameterType="VoterVO">
+		UPDATE voter
+		SET option_seq = #{option_seq}, voter_st ='Y'
+		WHERE vote_seq = #{vote_seq}
+		AND mem_id =#{mem_id}		
+		</update>
+		
+		<!-- vote_option 업데이트 -->
+		<update id="voteOptionUpdate" parameterType="VoterVO">
+			<selectKey order="BEFORE" keyProperty="voter_seq" resultType="int" >
+	 			SELECT COUNT(*) AS voter_seq 
+				FROM voter
+				WHERE vote_seq = #{vote_seq}
+				AND option_seq = #{option_seq}
+	 		</selectKey>
+	 		
+	 		UPDATE vote_option
+			SET option_hit = #{voter_seq}
+			WHERE option_seq = #{option_seq}			
+		</update>
+		
+		<!-- voteMemberList 요청 -->
+		<select id="getVoteMemberList" parameterType="int" resultType="VoteSeniorVO">			
+			SELECT A.*, B.option_content
+			FROM
+			    (
+			    SELECT *
+			    FROM voter
+			    WHERE option_seq = #{option_seq}
+			    ) A,
+			    (
+			    SELECT option_seq,option_content
+			    FROM vote_option
+			    WHERE option_seq = #{option_seq}
+			    ) B
+			WHERE A.option_seq = B.option_seq
+		</select>
+		
+		<!-- voteEnd update 요청 -->
+		<update id="voteEnd" parameterType="int">
+		UPDATE vote 
+		SET vote_st = 'N'
+		WHERE vote_seq = #{vote_seq}
+		</update>
+		
+		<!-- voteDelete 삭제 요청 -->
+		<delete id="voteDelete" parameterType="int">
+		DELETE 
+		FROM vote
+		WHERE vote_seq = #{vote_seq}
+		</delete>
+		
+		<!-- vote Membe Img 가져오기 -->
+		<select id="getMemberImg" parameterType="int" resultType="String">
+		SELECT mem_profile
+		FROM MEMBER
+		WHERE mem_id = (SELECT mem_id 
+		                FROM vote
+		                WHERE vote_seq =#{vote_seq})
+		
+		</select>
+		
+		
+		<!-- vote MemberImgList 가져오기 -->
+		<select id="getMemberImgList" parameterType="int" resultType="MemberVo">
+		SELECT *
+		FROM MEMBER
+		WHERE mem_id IN (SELECT mem_id 
+		                    FROM voter
+		                    WHERE option_seq = #{option_seq})		
+		</select>
+		
+		<!-- vote_optionVO 가져오기 -->
+		<select id="getVoteOption" parameterType="int" resultType="Vote_optionVO">
+		SELECT *
+		FROM vote_option
+		WHERE option_seq =#{vote_option_seq}		
+		</select>
+</mapper>
